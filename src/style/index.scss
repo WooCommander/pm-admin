@@ -1,6 +1,7 @@
 // Корневые стили pm-admin.
-// Дизайн-токены и тема — через tir-style-system (подключим на этапе 2,
-// когда появится MainLayout).
+// Дизайн-токены и тема — из tir-style-system (index.scss содержит шрифты,
+// light/dark CSS-переменные, normalize и т.д.).
+@use 'tir-style-system/index.scss';
 
 *,
 *::before,
@@ -13,6 +14,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', system-ui, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-base);
 }
 
 #app {

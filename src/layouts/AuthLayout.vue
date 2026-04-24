@@ -1,33 +1,41 @@
 <script setup lang="ts">
 /**
  * Лейаут для страниц авторизации.
- * Простой центрированный контейнер + футер с копирайтом.
- * Форма логина / другие auth-страницы вставляются через <router-view />.
+ *
+ * Центрированный контейнер на сером фоне `--bg-tertiary`,
+ * под модалкой — копирайт из макета 8-1450.
  */
-const year = new Date().getFullYear()
+const startYear = 2010
+const currentYear = new Date().getFullYear()
 </script>
 
 <template>
   <div class="auth-layout">
     <router-view />
-    <footer class="auth-layout__footer">© {{ year }} pm-admin</footer>
+    <footer class="auth-layout__footer">
+      © {{ startYear }} – {{ currentYear }} TirScript. All rights reserved.
+      Images copyright.
+    </footer>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .auth-layout {
-  position: relative;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #f4f4f5;
+  gap: 24px;
+  padding: 24px 16px;
+  background: var(--bg-tertiary);
 
   &__footer {
-    position: absolute;
-    bottom: 16px;
+    font-family: 'Roboto', system-ui, sans-serif;
     font-size: 12px;
-    color: #93969b;
+    line-height: 16px;
+    color: var(--text-tertiary);
+    text-align: center;
   }
 }
 </style>
