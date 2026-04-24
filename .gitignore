@@ -1,0 +1,12 @@
+node_modules
+dist
+.cache
+.DS_Store
+*.log
+.vscode
+.idea
+.env
+.env.*
+!.env.example
+coverage
+.tmp

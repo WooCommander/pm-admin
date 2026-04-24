@@ -1,0 +1,20 @@
+// Корневые стили pm-admin.
+// Дизайн-токены и тема — через tir-style-system (подключим на этапе 2,
+// когда появится MainLayout).
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', system-ui, sans-serif;
+}
+
+#app {
+  min-height: 100vh;
+}
