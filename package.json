@@ -6,12 +6,13 @@
   "description": "Админка по управлению продуктом (pm-admin)",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "set-registry": "npm set registry https://verdaccio.tirscript.com/",
     "lint": "eslint . --ext .vue,.js,.ts",
     "lint:fix": "eslint . --ext .vue,.js,.ts --fix",
-    "format": "prettier --write \"src/**/*.{ts,vue,scss}\""
+    "format": "prettier --write \"src/**/*.{ts,vue,scss}\"",
+    "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
     "js-cookie": "^3.0.5",
@@ -28,7 +29,6 @@
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@vitejs/plugin-vue": "^5.2.1",
-    "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-simple-import-sort": "^12.1.0",

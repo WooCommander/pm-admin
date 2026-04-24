@@ -10,3 +10,6 @@ dist
 !.env.example
 coverage
 .tmp
+
+# побочные .d.ts от vue-tsc -b (на случай повторного запуска)
+src/**/*.d.ts
