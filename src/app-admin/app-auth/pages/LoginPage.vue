@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import { LoginForm, TirScriptLogo } from '../components';
 
@@ -10,13 +10,19 @@ import { LoginForm, TirScriptLogo } from '../components';
  *   - модалка 392px, bg `--bg-base`, border-radius 20, паддинги 40
  *   - лого сверху, под ним форма (2 инпута + 2 кнопки)
  *   - обработка «Восстановить доступ» пока заглушкой
+ *
+ * Поддерживает `?from=/path` — туда `isAuth`-middleware кладёт исходный
+ * URL, когда отправляет неавторизованного на логин. После успеха
+ * возвращаемся ровно туда; если параметра нет — на `/marketing`.
  */
 
 const router = useRouter();
+const route = useRoute();
 
 const onLoginSuccess = (): void => {
-  // После реального логина пойдём по умолчанию в /marketing.
-  void router.push('/marketing');
+  const from = route.query.from;
+  const target = typeof from === 'string' && from.startsWith('/') ? from : '/marketing';
+  void router.push(target);
 };
 
 const onForgotPassword = (): void => {

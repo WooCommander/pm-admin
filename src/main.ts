@@ -7,6 +7,7 @@ import { TirPmStatusBudgeStyleVars } from 'tir-pm-status-budge'
 import { createApp } from 'vue'
 
 import App from './App.vue'
+import { appAdminService } from './app-admin'
 import { router } from './router'
 
 // initStyleVars() из tir-components сюда не подключаем — barrel
@@ -18,5 +19,9 @@ TirPmInputStyleVars.setVars(new TirPmInputStyleVars())
 TirPmButtonStyleVars.setVars(new TirPmButtonStyleVars())
 TirPmPlateStyleVars.setVars(new TirPmPlateStyleVars())
 TirPmStatusBudgeStyleVars.setVars(new TirPmStatusBudgeStyleVars())
+
+// Поднимаем токен из cookie до маунта — иначе на первой же навигации
+// isAuth-middleware кинет уже залогиненного пользователя на /auth/login.
+appAdminService.restoreFromCookie()
 
 createApp(App).use(router).mount('#app')

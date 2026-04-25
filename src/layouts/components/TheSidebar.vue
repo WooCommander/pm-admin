@@ -1,18 +1,14 @@
 <script setup lang="ts">
-/**
- * Сайдбар админки — 224px, две группы пунктов, разделитель между ними.
- * Источник меню — SIDEBAR_MENU из shared/constants.
- * Активный пункт подсвечивается через router-link-active.
- */
 import { computed } from 'vue'
 
 import { SIDEBAR_MENU } from '@/shared/constants'
 
 const primaryItems = computed(() =>
-  SIDEBAR_MENU.filter((i) => i.group === 'primary'),
+  SIDEBAR_MENU.filter((item) => item.group === 'primary'),
 )
+
 const adminItems = computed(() =>
-  SIDEBAR_MENU.filter((i) => i.group === 'admin'),
+  SIDEBAR_MENU.filter((item) => item.group === 'admin'),
 )
 </script>
 
@@ -26,13 +22,16 @@ const adminItems = computed(() =>
         class="the-sidebar__item"
         active-class="the-sidebar__item--active"
       >
-        {{ item.title }}
+        <span class="the-sidebar__icon-shell">
+          <component :is="item.icon" class="the-sidebar__icon" />
+        </span>
+        <span class="the-sidebar__label">{{ item.title }}</span>
       </router-link>
     </nav>
 
-    <div class="the-sidebar__divider" />
+    <div v-if="adminItems.length" class="the-sidebar__divider" />
 
-    <nav class="the-sidebar__group">
+    <nav v-if="adminItems.length" class="the-sidebar__group">
       <router-link
         v-for="item in adminItems"
         :key="item.key"
@@ -40,7 +39,10 @@ const adminItems = computed(() =>
         class="the-sidebar__item"
         active-class="the-sidebar__item--active"
       >
-        {{ item.title }}
+        <span class="the-sidebar__icon-shell">
+          <component :is="item.icon" class="the-sidebar__icon" />
+        </span>
+        <span class="the-sidebar__label">{{ item.title }}</span>
       </router-link>
     </nav>
   </aside>
@@ -48,47 +50,75 @@ const adminItems = computed(() =>
 
 <style lang="scss" scoped>
 .the-sidebar {
-  width: 224px;
+  width: 256px;
   flex-shrink: 0;
-  background: #ffffff;
-  border-right: 1px solid #eaeaeb;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 16px 0;
-  box-sizing: border-box;
+  gap: 14px;
+  padding: 20px 16px;
+  background: #f3f4f7;
+  border-right: 1px solid #e5e7ec;
 
   &__group {
     display: flex;
     flex-direction: column;
+    gap: 10px;
   }
 
   &__divider {
     height: 1px;
-    background: #eaeaeb;
-    margin: 12px 16px;
+    margin: 2px 4px 0;
+    background: #cfd3db;
   }
 
   &__item {
     display: flex;
     align-items: center;
-    height: 40px;
-    padding: 0 16px;
-    color: #272d37;
-    font-size: 14px;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 12px;
+    border-radius: 10px;
+    color: #353b47;
     text-decoration: none;
-    border-left: 2px solid transparent;
-    transition: background-color 0.15s, color 0.15s;
+    transition: background-color 0.15s ease, color 0.15s ease;
 
     &:hover {
-      background: #f8f6f9;
+      background: rgba(215, 218, 225, 0.52);
     }
 
     &--active {
-      background: #f4f4f5;
-      color: #21324f;
-      font-weight: 500;
-      border-left-color: #21324f;
+      background: #dde0e5;
+      color: #303643;
+      font-weight: 600;
     }
+  }
+
+  &__icon-shell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 999px;
+    background: #ffffff;
+    box-shadow: inset 0 0 0 1px #eceef2;
+  }
+
+  &__icon {
+    width: 18px;
+    height: 18px;
+    color: #7d8391;
+  }
+
+  &__label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+    line-height: 1.2;
   }
 }
 </style>

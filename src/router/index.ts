@@ -14,6 +14,8 @@ import { AppStatisticsRoutes } from '@/app-admin/app-statistics'
 import { AppSupportRoutes } from '@/app-admin/app-support'
 import { AuthLayout, MainLayout } from '@/layouts'
 
+import { installIsAuthMiddleware } from './middleware'
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/auth',
@@ -24,6 +26,9 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: MainLayout,
     redirect: '/marketing',
+    // meta.isAuth наследуется всеми дочерними роутами через to.matched —
+    // достаточно одной отметки на корне MainLayout.
+    meta: { isAuth: true },
     children: [
       { path: 'marketing',  children: AppMarketingRoutes },
       { path: 'crm',        children: AppCrmRoutes },
@@ -46,3 +51,5 @@ export const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
+installIsAuthMiddleware(router)

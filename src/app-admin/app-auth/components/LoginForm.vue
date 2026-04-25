@@ -6,8 +6,9 @@ import { TirPmStatusBudge } from 'tir-pm-status-budge';
 import { EyeIcon, EyeSlashIcon, KeyIcon, UserIcon } from 'tir-style-system/icons/solid';
 import { computed, reactive, ref, watch } from 'vue';
 
+import { appAdminService } from '@/app-admin';
+
 import { createEmptyLoginForm, type LoginFormModel } from '../models';
-import { authService } from '../services';
 
 const emit = defineEmits<{
   (e: 'success'): void;
@@ -44,7 +45,10 @@ const onSubmit = async (): Promise<void> => {
   isLoading.value = true;
   error.value = null;
 
-  const result = await authService.login({
+  // Логин идёт через AppAdminService — он сам обновит AppAdminState
+  // (currentUser/token) и положит токен в cookie. authService напрямую
+  // больше не зовём, чтобы стейт не разъезжался.
+  const result = await appAdminService.login({
     email: form.email,
     password: form.password,
   });

@@ -1,9 +1,13 @@
-/**
- * Сайдбар админки. Порядок и группы — 1-в-1 по макету Figma (node 1-4213):
- * - группа `primary`  — основные бизнес-модули
- * - разделитель
- * - группа `admin`    — администрирование
- */
+import type { Component } from 'vue'
+
+import {
+  ChartBarIcon,
+  FunnelIcon,
+  LifebuoyIcon,
+  PresentationChartBarIcon,
+  UserCircleIcon,
+  UsersIcon,
+} from 'tir-style-system/icons/outline'
 
 export type MenuGroup = 'primary' | 'admin'
 
@@ -12,17 +16,15 @@ export interface MenuItem {
   title: string
   path: string
   group: MenuGroup
+  icon: Component
 }
 
 export const SIDEBAR_MENU: MenuItem[] = [
-  // Группа 1 — основное
-  { key: 'marketing',  title: 'Маркетинг',              path: '/marketing',  group: 'primary' },
-  { key: 'crm',        title: 'CRM / Воронка',          path: '/crm',        group: 'primary' },
-  { key: 'accounts',   title: 'Управление аккаунтами',  path: '/accounts',   group: 'primary' },
-  { key: 'billing',    title: 'Биллинг',                path: '/billing',    group: 'primary' },
-  { key: 'statistics', title: 'Статистика',             path: '/statistics', group: 'primary' },
-  { key: 'support',    title: 'Техподдержка',           path: '/support',    group: 'primary' },
-  // Группа 2 — администрирование
-  { key: 'employees',  title: 'Сотрудники',             path: '/employees',  group: 'admin' },
-  { key: 'analytics',  title: 'Аналитика',              path: '/analytics',  group: 'admin' },
+  { key: 'marketing', title: 'Маркетинг', path: '/marketing', group: 'primary', icon: PresentationChartBarIcon },
+  { key: 'crm', title: 'CRM / Воронка', path: '/crm', group: 'primary', icon: FunnelIcon },
+  { key: 'accounts', title: 'Управление аккаунтами', path: '/accounts', group: 'primary', icon: UserCircleIcon },
+  { key: 'statistics', title: 'Статистика', path: '/statistics', group: 'primary', icon: ChartBarIcon },
+  { key: 'support', title: 'Техподдержка', path: '/support', group: 'primary', icon: LifebuoyIcon },
+  { key: 'employees', title: 'Сотрудники', path: '/employees', group: 'admin', icon: UsersIcon },
+  { key: 'analytics', title: 'Аналитика', path: '/analytics', group: 'admin', icon: ChartBarIcon },
 ]
