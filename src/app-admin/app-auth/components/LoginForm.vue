@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button';
 import { TirPmInput, TirPmInputSizeEnum } from 'tir-pm-input';
-import { ExclamationCircleIcon, EyeIcon, EyeSlashIcon, KeyIcon, UserIcon } from 'tir-style-system/icons/solid';
+import { TirPmPlate } from 'tir-pm-plate';
+import { TirPmStatusBudge } from 'tir-pm-status-budge';
+import { EyeIcon, EyeSlashIcon, KeyIcon, UserIcon } from 'tir-style-system/icons/solid';
 import { computed, reactive, ref, watch } from 'vue';
 
 import { createEmptyLoginForm, type LoginFormModel } from '../models';
@@ -117,16 +119,28 @@ const togglePasswordVisibility = (): void => {
           </button>
         </template>
       </TirPmInput>
-<TirPmBadg
-      <div v-if="error" class="login-form__error" role="alert">
-        <ExclamationCircleIcon class="login-form__error-icon" />
-        <div class="login-form__error-content">
-          <p class="login-form__error-text">{{ error }}</p>
-          <button type="button" class="login-form__error-link" @click="onForgot">
-            Восстановить доступ
-          </button>
-        </div>
-      </div>
+
+      <TirPmPlate
+        v-if="error"
+        :is-show="true"
+        variant="attention"
+        is-bordered
+        is-rounded
+        class="login-form__error-plate"
+      >
+        <template #leftAddon>
+          <TirPmStatusBudge status-icon-type="alert" status-color="alert" />
+        </template>
+
+        <template #subtitleSlot>
+          <div class="login-form__error-copy">
+            <div class="login-form__error-text">{{ error }}</div>
+            <button type="button" class="login-form__error-link" @click="onForgot">
+              Восстановить доступ
+            </button>
+          </div>
+        </template>
+      </TirPmPlate>
     </div>
 
     <div class="login-form__actions">
@@ -197,33 +211,18 @@ const togglePasswordVisibility = (): void => {
     opacity: 0.5;
   }
 
-  &__error {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    padding: 12px 10px;
-    background: #fdecec;
-    border-radius: 8px;
+  &__error-plate {
+    width: 100%;
   }
 
-  &__error-icon {
-    width: 18px;
-    height: 18px;
-    color: #ef4423;
-    flex: 0 0 auto;
-    margin-top: 1px;
-  }
-
-  &__error-content {
+  &__error-copy {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 2px;
-    min-width: 0;
   }
 
   &__error-text {
-    margin: 0;
     font-size: 12px;
     line-height: 16px;
     color: #353748;
@@ -247,6 +246,28 @@ const togglePasswordVisibility = (): void => {
 
   &__button {
     width: 100%;
+  }
+
+  :deep(.login-form__error-plate.plate) {
+    padding: 10px 10px 9px;
+    border-width: 1px;
+    border-color: rgba(239, 68, 35, 0.08);
+    background: #fdecec;
+    align-items: flex-start;
+  }
+
+  :deep(.login-form__error-plate .plate__left-addons) {
+    padding: 2px 8px 0 0;
+  }
+
+  :deep(.login-form__error-plate .plate__content) {
+    min-width: 0;
+  }
+
+  :deep(.login-form__error-plate .plate__subtitle) {
+    padding: 0;
+    font-size: 12px;
+    line-height: 16px;
   }
 }
 </style>
