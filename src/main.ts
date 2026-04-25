@@ -1,12 +1,18 @@
 import './style/index.scss'
 
-import { initStyleVars } from 'tir-components'
+import { TirPmButtonStyleVars } from 'tir-pm-button'
+import { TirPmInputStyleVars } from 'tir-pm-input'
 import { createApp } from 'vue'
 
 import App from './App.vue'
 import { router } from './router'
 
-// Регистрируем CSS-переменные всех tir-pm-* компонентов в :root.
-initStyleVars()
+// initStyleVars() из tir-components сюда не подключаем — barrel
+// тянет tir-pm-popover с битым реэкспортом типа (см. tir-components.md).
+// Поэтому нужные --tir-pm-* CSS-переменные ставим точечно: только под
+// те пакеты, которые реально используются в админке. Базовые токены
+// (--neutral-*, --accent, --text-*) уже даёт tir-style-system/index.scss.
+TirPmInputStyleVars.setVars(new TirPmInputStyleVars())
+TirPmButtonStyleVars.setVars(new TirPmButtonStyleVars())
 
 createApp(App).use(router).mount('#app')

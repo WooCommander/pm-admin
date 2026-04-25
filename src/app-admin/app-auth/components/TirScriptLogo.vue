@@ -1,16 +1,14 @@
 <script setup lang="ts">
+import logoUrl from '@/style/img/logo.svg';
+
 /**
- * Простой текстовый лого TirScript.
- *
- * По макету — 232×32, шрифт Roboto, вес 500.
- * Когда будет настоящий SVG от дизайнеров — заменим разметку.
+ * Логотип TirScript из SVG-ассета.
  */
 </script>
 
 <template>
   <div class="tirscript-logo" aria-label="TirScript">
-    <span class="tirscript-logo__mark" aria-hidden="true">&#x25C6;</span>
-    <span class="tirscript-logo__text">TirScript</span>
+    <img class="tirscript-logo__image" :src="logoUrl" alt="TirScript" />
   </div>
 </template>
 
@@ -18,21 +16,14 @@
 .tirscript-logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  height: 32px;
-  font-family: 'Roboto', system-ui, sans-serif;
-  color: var(--text-primary);
+  justify-content: center;
+  width: 100%;
 
-  &__mark {
-    font-size: 24px;
-    line-height: 1;
-    color: var(--accent, #34538d);
-  }
-
-  &__text {
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: 0.4px;
+  &__image {
+    display: block;
+    width: 100%;
+    max-width: 136px;
+    height: auto;
   }
 }
 </style>

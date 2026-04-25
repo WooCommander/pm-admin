@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 
-import { LoginForm, TirScriptLogo } from '../components'
+import { LoginForm, TirScriptLogo } from '../components';
 
 /**
  * Страница входа.
@@ -12,17 +12,17 @@ import { LoginForm, TirScriptLogo } from '../components'
  *   - обработка «Восстановить доступ» пока заглушкой
  */
 
-const router = useRouter()
+const router = useRouter();
 
 const onLoginSuccess = (): void => {
   // После реального логина пойдём по умолчанию в /marketing.
-  void router.push('/marketing')
-}
+  void router.push('/marketing');
+};
 
 const onForgotPassword = (): void => {
   // TODO: страница восстановления доступа появится в отдельном этапе.
-  console.info('[auth] forgot-password: stub')
-}
+  console.info('[auth] forgot-password: stub');
+};
 </script>
 
 <template>
@@ -30,7 +30,6 @@ const onForgotPassword = (): void => {
     <div class="login-page__modal">
       <header class="login-page__header">
         <TirScriptLogo />
-        <h1 id="login-title" class="login-page__title">Вход в админку</h1>
       </header>
 
       <LoginForm @success="onLoginSuccess" @forgot-password="onForgotPassword" />
@@ -44,15 +43,16 @@ const onForgotPassword = (): void => {
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 40px 16px;
+  min-height: 100%;
+  padding: 24px 16px;
 
   &__modal {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 28px;
     width: 100%;
     max-width: 392px;
-    padding: 40px;
+    padding: 32px 24px 24px;
     background: var(--bg-base);
     border-radius: 20px;
     box-shadow: 0 1px 2px rgba(39, 45, 55, 0.06);
@@ -61,9 +61,9 @@ const onForgotPassword = (): void => {
 
   &__header {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
   }
 
   &__title {
@@ -73,6 +73,16 @@ const onForgotPassword = (): void => {
     line-height: 24px;
     font-weight: 500;
     color: var(--text-primary);
+  }
+
+  @media (max-width: 480px) {
+    padding-inline: 0;
+
+    &__modal {
+      max-width: 100%;
+      padding: 24px 16px 20px;
+      border-radius: 16px;
+    }
   }
 }
 </style>

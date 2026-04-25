@@ -6,13 +6,15 @@
   "description": "Админка по управлению продуктом (pm-admin)",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "node scripts/type-check.mjs && vite build",
     "preview": "vite preview",
+    "mcp:obsidian": "node scripts/obsidian-mcp.mjs",
     "set-registry": "npm set registry https://verdaccio.tirscript.com/",
     "lint": "eslint . --ext .vue,.js,.ts",
     "lint:fix": "eslint . --ext .vue,.js,.ts --fix",
     "format": "prettier --write \"src/**/*.{ts,vue,scss}\"",
-    "type-check": "vue-tsc --noEmit"
+    "type-check": "node scripts/type-check.mjs",
+    "type-check:full": "vue-tsc --noEmit"
   },
   "dependencies": {
     "js-cookie": "^3.0.5",

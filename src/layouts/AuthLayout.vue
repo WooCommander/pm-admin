@@ -3,7 +3,7 @@
  * Лейаут для страниц авторизации.
  *
  * Центрированный контейнер на сером фоне `--bg-tertiary`,
- * под модалкой — копирайт из макета 8-1450.
+ * под модалкой - копирайт из макета 8-1450.
  */
 const startYear = 2010
 const currentYear = new Date().getFullYear()
@@ -11,9 +11,12 @@ const currentYear = new Date().getFullYear()
 
 <template>
   <div class="auth-layout">
-    <router-view />
+    <main class="auth-layout__content">
+      <router-view />
+    </main>
+
     <footer class="auth-layout__footer">
-      © {{ startYear }} – {{ currentYear }} TirScript. All rights reserved.
+      © {{ startYear }} - {{ currentYear }} TirScript. All rights reserved.
       Images copyright.
     </footer>
   </div>
@@ -25,12 +28,21 @@ const currentYear = new Date().getFullYear()
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 24px;
-  padding: 24px 16px;
+  padding: 0 16px 32px;
   background: var(--bg-tertiary);
 
+  &__content {
+    display: flex;
+    flex: 1 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 0;
+    padding: 24px 0;
+  }
+
   &__footer {
+    flex: 0 0 auto;
     font-family: 'Roboto', system-ui, sans-serif;
     font-size: 12px;
     line-height: 16px;
