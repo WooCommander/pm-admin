@@ -10,6 +10,7 @@ import { XMarkIcon } from 'tir-style-system/icons/outline'
 import { ref, watch } from 'vue'
 
 import type { EmployeeFormModel } from '../models'
+import EmployeeAccessTab from './EmployeeAccessTab.vue'
 import EmployeeFormFields from './EmployeeFormFields.vue'
 
 const props = defineProps<{
@@ -78,14 +79,21 @@ watch(
             />
           </div>
 
+          <EmployeeAccessTab
+            v-else-if="activeTab === 'access'"
+            :model-value="form"
+            class="employee-profile-drawer__tab-content"
+            @update:model-value="emit('update:form', $event)"
+          />
+
           <div v-else class="employee-profile-drawer__placeholder">
             <div class="employee-profile-drawer__placeholder-card">
               <p class="employee-profile-drawer__placeholder-title">
-                {{ activeTab === 'team' ? 'Управление командой' : 'Доступ в систему' }}
+                Управление командой
               </p>
               <p class="employee-profile-drawer__placeholder-text">
                 Этот блок вынесен в следующий этап, чтобы не смешивать детали профиля
-                с командной и access-логикой.
+                с командной логикой.
               </p>
             </div>
           </div>
