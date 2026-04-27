@@ -15,6 +15,10 @@ const props = defineProps<{
   isLoading?: boolean
 }>()
 
+const emit = defineEmits<{
+  (e: 'row-click', link: MarketingLinkModel): void
+}>()
+
 const currentPage = ref(1)
 const pageSize = ref(19)
 
@@ -66,6 +70,8 @@ const pagedLinks = () => {
             v-for="link in pagedLinks()"
             :key="link.id"
             :columns="TABLE_COLUMNS"
+            class="links-table__row"
+            @click="emit('row-click', link)"
           >
             <!-- Название кампании -->
             <TirPmTableTd :is-left-border="false">
@@ -249,6 +255,15 @@ const pagedLinks = () => {
     line-height: 20px;
     color: var(--text-primary, #272d37);
     font-weight: 500;
+  }
+
+  // Строка (кликабельная)
+  &__row {
+    cursor: pointer;
+
+    &:hover {
+      background: var(--neutral-5, #f5f5f6);
+    }
   }
 
   // Футер

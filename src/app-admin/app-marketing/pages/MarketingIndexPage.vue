@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import { appMarketingService } from '..'
 import {
   MarketingFilterBar,
+  MarketingLinkModal,
   MarketingLinksTable,
   MarketingOverlay,
   MarketingStatsCard,
 } from '../components'
-import type { MarketingFiltersModel } from '../models'
+import type { MarketingFiltersModel, MarketingLinkFormModel, MarketingLinkModel } from '../models'
 
 const service = appMarketingService
 const state = service.state
@@ -17,7 +18,8 @@ onMounted(() => {
   void service.loadInitialData()
 })
 
-// Фильтрация
+// --- Фильтрация ---
+
 const filteredLinks = computed(() => {
   const { statusTab, search } = state.filters
   return state.links.filter((link) => {
@@ -42,11 +44,38 @@ function onUpdateFilters(patch: Partial<MarketingFiltersModel>): void {
 }
 
 function onApply(): void {
-  // Заглушка — здесь будет перезагрузка данных с новыми датами
+  // TODO: перезагрузка данных с новым диапазоном дат
 }
 
+// --- Модал ---
+
+type ModalMode = 'add' | 'edit'
+
+const isModalVisible = ref(false)
+const modalMode = ref<ModalMode>('add')
+const modalLink = ref<MarketingLinkModel | null>(null)
+
 function onAdd(): void {
-  // Заглушка — откроет модальку создания ссылки
+  modalMode.value = 'add'
+  modalLink.value = null
+  isModalVisible.value = true
+}
+
+function onRowClick(link: MarketingLinkModel): void {
+  modalMode.value = 'edit'
+  modalLink.value = link
+  isModalVisible.value = true
+}
+
+function onModalClose(): void {
+  isModalVisible.value = false
+  modalLink.value = null
+}
+
+function onModalSave(form: MarketingLinkFormModel): void {
+  // TODO: сохранение через сервис
+  console.log('save link form', form)
+  onModalClose()
 }
 </script>
 
@@ -79,6 +108,16 @@ function onAdd(): void {
     <MarketingLinksTable
       :links="filteredLinks"
       :is-loading="state.isLoading"
+      @row-click="onRowClick"
+    />
+
+    <!-- Модал добавления / редактирования ссылки -->
+    <MarketingLinkModal
+      :is-visible="isModalVisible"
+      :mode="modalMode"
+      :link="modalLink"
+      @close="onModalClose"
+      @save="onModalSave"
     />
   </section>
 </template>

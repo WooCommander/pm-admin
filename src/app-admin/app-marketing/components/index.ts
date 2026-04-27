@@ -1,5 +1,8 @@
 export { default as MarketingDatePicker } from './MarketingDatePicker.vue'
 export { default as MarketingFilterBar } from './MarketingFilterBar.vue'
+export { default as MarketingLinkDetailsTab } from './MarketingLinkDetailsTab.vue'
+export { default as MarketingLinkModal } from './MarketingLinkModal.vue'
 export { default as MarketingLinksTable } from './MarketingLinksTable.vue'
+export { default as MarketingLinkStatsTab } from './MarketingLinkStatsTab.vue'
 export { default as MarketingOverlay } from './MarketingOverlay.vue'
 export { default as MarketingStatsCard } from './MarketingStatsCard.vue'
