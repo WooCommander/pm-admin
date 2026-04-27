@@ -19,6 +19,17 @@ export interface EmployeeListItemModel {
   role: string
   status: EmployeeStatus
   avatarColor: string
+  avatarUrl?: string
+}
+
+export interface EmployeeFormModel {
+  firstName: string
+  lastName: string
+  middleName: string
+  email: string
+  role: string
+  status: EmployeeStatus
+  avatarUrl?: string
 }
 
 export interface EmployeesFiltersModel {
@@ -61,3 +72,30 @@ export const getEmployeeFullName = (employee: EmployeeListItemModel): string =>
 
 export const getEmployeeInitials = (employee: EmployeeListItemModel): string =>
   `${employee.firstName[0] ?? ''}${employee.lastName[0] ?? ''}`.toUpperCase()
+
+export const createDefaultEmployeeForm = (): EmployeeFormModel => ({
+  firstName: '',
+  lastName: '',
+  middleName: '',
+  email: '',
+  role: EMPLOYEE_ROLE_OPTIONS[1]?.value ?? '',
+  status: 'active',
+  avatarUrl: '',
+})
+
+export const createEmployeeFormFromEmployee = (
+  employee: EmployeeListItemModel,
+): EmployeeFormModel => ({
+  firstName: employee.firstName,
+  lastName: employee.lastName,
+  middleName: employee.middleName,
+  email: employee.email,
+  role: employee.role,
+  status: employee.status,
+  avatarUrl: employee.avatarUrl ?? '',
+})
+
+export const isEmployeeFormValid = (form: EmployeeFormModel): boolean =>
+  [form.firstName, form.lastName, form.middleName, form.email, form.role].every(
+    (value) => value.trim().length > 0,
+  )

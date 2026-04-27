@@ -1,39 +1,39 @@
 <script setup lang="ts">
-import { TirPmButton } from 'tir-pm-button'
-import { TirPmDropdown, TirPmDropdownSizeEnum } from 'tir-pm-dropdown'
-import type { ITirPmDropdownOption } from 'tir-pm-dropdown'
-import { TirPmInput, TirPmInputSizeEnum } from 'tir-pm-input'
-import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon } from 'tir-style-system/icons/outline'
-import { computed } from 'vue'
+import { TirPmSearchInput } from 'tir-components';
+import { TirPmButton } from 'tir-pm-button';
+import type { ITirPmDropdownOption } from 'tir-pm-dropdown';
+import { TirPmDropdown, TirPmDropdownSizeEnum } from 'tir-pm-dropdown';
+import { ChevronDownIcon, PlusIcon } from 'tir-style-system/icons/outline';
+import { computed } from 'vue';
 
 import {
   EMPLOYEE_ROLE_OPTIONS,
   EMPLOYEE_STATUS_OPTIONS,
   type EmployeesFiltersModel,
-} from '../models'
-import EmployeeStatusBadge from './EmployeeStatusBadge.vue'
+} from '../models';
+import EmployeeStatusBadge from './EmployeeStatusBadge.vue';
 
 type DropdownOption = ITirPmDropdownOption & {
-  value: string
-  label: string
-}
+  value: string;
+  label: string;
+};
 
 const props = defineProps<{
-  filters: EmployeesFiltersModel
-  isCreateDisabled?: boolean
-}>()
+  filters: EmployeesFiltersModel;
+  isCreateDisabled?: boolean;
+}>();
 
 const emit = defineEmits<{
-  (e: 'update:filters', value: EmployeesFiltersModel): void
-  (e: 'create'): void
-}>()
+  (e: 'update:filters', value: EmployeesFiltersModel): void;
+  (e: 'create'): void;
+}>();
 
 const updateFilters = (patch: Partial<EmployeesFiltersModel>) => {
   emit('update:filters', {
     ...props.filters,
     ...patch,
-  })
-}
+  });
+};
 
 const statusOptions = computed<DropdownOption[]>(() =>
   EMPLOYEE_STATUS_OPTIONS.map((option) => ({
@@ -41,7 +41,7 @@ const statusOptions = computed<DropdownOption[]>(() =>
     value: option.value,
     label: option.label,
   })),
-)
+);
 
 const roleOptions = computed<DropdownOption[]>(() =>
   EMPLOYEE_ROLE_OPTIONS.map((option) => ({
@@ -49,15 +49,15 @@ const roleOptions = computed<DropdownOption[]>(() =>
     value: option.value,
     label: option.label,
   })),
-)
+);
 
 const selectedStatusOption = computed<DropdownOption | undefined>(() =>
   statusOptions.value.find((option) => option.value === props.filters.status),
-)
+);
 
 const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   roleOptions.value.find((option) => option.value === props.filters.role),
-)
+);
 </script>
 
 <template>
@@ -76,14 +76,11 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
           width="auto"
           popover-width="14rem"
         >
-          <template #target="{ isOpened, toOpen, toClose }">
-            <button
-              type="button"
-              class="employees-toolbar__trigger"
-              :class="{ 'is-opened': isOpened }"
-              @click="isOpened ? toClose() : toOpen()"
-            >
-              <span v-if="filters.status === 'all'" class="employees-toolbar__selected-text">Все</span>
+          <template #target>
+            <button type="button" class="employees-toolbar__trigger">
+              <span v-if="filters.status === 'all'" class="employees-toolbar__selected-text"
+                >Все</span
+              >
               <EmployeeStatusBadge v-else :status="filters.status" />
               <ChevronDownIcon class="employees-toolbar__chevron" />
             </button>
@@ -96,7 +93,10 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
               @click="updateFilters({ status: option.value as EmployeesFiltersModel['status'] })"
             >
               <span v-if="option.value === 'all'">{{ option.label }}</span>
-              <EmployeeStatusBadge v-else :status="option.value as Exclude<EmployeesFiltersModel['status'], 'all'>" />
+              <EmployeeStatusBadge
+                v-else
+                :status="option.value as Exclude<EmployeesFiltersModel['status'], 'all'>"
+              />
             </button>
           </template>
         </TirPmDropdown>
@@ -115,13 +115,8 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
           width="auto"
           popover-width="13rem"
         >
-          <template #target="{ isOpened, toOpen, toClose }">
-            <button
-              type="button"
-              class="employees-toolbar__trigger"
-              :class="{ 'is-opened': isOpened }"
-              @click="isOpened ? toClose() : toOpen()"
-            >
+          <template #target>
+            <button type="button" class="employees-toolbar__trigger">
               <span class="employees-toolbar__selected-text">{{ selectedRoleOption?.label }}</span>
               <ChevronDownIcon class="employees-toolbar__chevron" />
             </button>
@@ -139,19 +134,16 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
         </TirPmDropdown>
       </div>
 
-      <TirPmInput
+      <TirPmSearchInput
         :model-value="filters.search"
         class="employees-toolbar__search"
         label=""
+        is-small
+        :is-with-popup="false"
         placeholder="Поиск по сотрудникам"
-        :size="TirPmInputSizeEnum.Regular"
-        :is-with-hint="false"
         @update:model-value="updateFilters({ search: String($event) })"
       >
-        <template #leftInputAddons>
-          <MagnifyingGlassIcon class="employees-toolbar__search-icon" />
-        </template>
-      </TirPmInput>
+      </TirPmSearchInput>
     </div>
 
     <TirPmButton

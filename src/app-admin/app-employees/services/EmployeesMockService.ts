@@ -1,4 +1,5 @@
 import type {
+  EmployeeFormModel,
   EmployeeListItemModel,
   EmployeesFiltersModel,
   EmployeesListResultModel,
@@ -109,6 +110,44 @@ export class EmployeesMockService {
       items,
       total: items.length,
     }
+  }
+
+  createEmployee(form: EmployeeFormModel): EmployeeListItemModel {
+    const employee: EmployeeListItemModel = {
+      id: `employee-${MOCK_EMPLOYEES.length + 1}`,
+      firstName: form.firstName.trim(),
+      lastName: form.lastName.trim(),
+      middleName: form.middleName.trim(),
+      email: form.email.trim(),
+      role: form.role,
+      status: form.status,
+      avatarColor: EMPLOYEE_COLORS[MOCK_EMPLOYEES.length % EMPLOYEE_COLORS.length],
+      avatarUrl: form.avatarUrl?.trim() || undefined,
+    }
+
+    MOCK_EMPLOYEES.unshift(employee)
+
+    return employee
+  }
+
+  getEmployeeById(employeeId: string): EmployeeListItemModel | undefined {
+    return MOCK_EMPLOYEES.find((employee) => employee.id === employeeId)
+  }
+
+  updateEmployee(employeeId: string, form: EmployeeFormModel): EmployeeListItemModel | undefined {
+    const employee = this.getEmployeeById(employeeId)
+
+    if (!employee) return undefined
+
+    employee.firstName = form.firstName.trim()
+    employee.lastName = form.lastName.trim()
+    employee.middleName = form.middleName.trim()
+    employee.email = form.email.trim()
+    employee.role = form.role
+    employee.status = form.status
+    employee.avatarUrl = form.avatarUrl?.trim() || undefined
+
+    return employee
   }
 }
 

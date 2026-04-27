@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { TirPmButton } from 'tir-pm-button'
-import { TirPmDropdown, TirPmDropdownSizeEnum } from 'tir-pm-dropdown'
 import type { ITirPmDropdownOption } from 'tir-pm-dropdown'
+import { TirPmDropdown, TirPmDropdownSizeEnum } from 'tir-pm-dropdown'
 import { TirPmPagination } from 'tir-pm-pagination'
 import { TirPmTable, TirPmTableTd, TirPmTableTh, TirPmTableTr } from 'tir-pm-table'
 import { ChevronDownIcon, ClipboardDocumentIcon } from 'tir-style-system/icons/outline'
@@ -29,6 +28,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+  (e: 'edit', employee: EmployeeListItemModel): void
   (e: 'update:page', value: number): void
   (e: 'update:pageSize', value: number): void
 }>()
@@ -72,11 +72,13 @@ const copyEmail = async (email: string) => {
             v-for="employee in employees"
             :key="employee.id"
             :columns="TABLE_COLUMNS"
+            class="employees-table__row"
+            @dblclick="emit('edit', employee)"
           >
             <TirPmTableTd :is-left-border="false">
               <img
                 class="employees-table__avatar"
-                src="https://i.pravatar.cc/32?img=12"
+                :src="employee.avatarUrl || 'https://i.pravatar.cc/32?img=12'"
                 alt=""
               >
             </TirPmTableTd>
@@ -120,12 +122,8 @@ const copyEmail = async (email: string) => {
         width="auto"
         popover-width="8rem"
       >
-        <template #target="{ isOpened, toOpen, toClose }">
-          <button
-            type="button"
-            class="employees-table__page-size-trigger"
-            @click="isOpened ? toClose() : toOpen()"
-          >
+        <template #target>
+          <button type="button" class="employees-table__page-size-trigger">
             <span class="employees-table__page-size-label">Показывать по {{ pageSize }}</span>
             <ChevronDownIcon class="employees-table__page-size-chevron" />
           </button>
@@ -187,6 +185,10 @@ const copyEmail = async (email: string) => {
     color: var(--text-primary);
     font: inherit;
     text-align: left;
+    cursor: pointer;
+  }
+
+  &__row {
     cursor: pointer;
   }
 
