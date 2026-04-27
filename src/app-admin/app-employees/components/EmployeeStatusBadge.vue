@@ -38,16 +38,16 @@ const budgeIconType = computed(() => {
 .employee-status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 0.375rem;
   min-width: 0;
 
   &__label {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
-    line-height: 16px;
+    line-height: 1rem;
     text-transform: uppercase;
   }
 

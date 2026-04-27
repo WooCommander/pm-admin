@@ -165,12 +165,12 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 0.75rem;
 
   &__filters {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 1.25rem;
     min-width: 0;
     flex: 1;
   }
@@ -178,21 +178,21 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   &__group {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
     flex: 0 0 auto;
   }
 
   &__label {
     color: var(--text-primary);
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     white-space: nowrap;
   }
 
   &__trigger {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 0.25rem;
     padding: 0;
     border: 0;
     background: transparent;
@@ -201,14 +201,14 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   }
 
   &__selected-text {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     white-space: nowrap;
   }
 
   &__chevron {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     color: var(--text-secondary);
   }
 
@@ -216,8 +216,8 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 32px;
-    padding: 6px 10px;
+    min-height: 2rem;
+    padding: 0.375rem 0.625rem;
     border: 0;
     background: transparent;
     text-align: left;
@@ -225,20 +225,20 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   }
 
   &__option--text {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 
   &__search {
-    max-width: 280px;
-    min-width: 240px;
-    flex: 1 1 280px;
+    max-width: 17.5rem;
+    min-width: 15rem;
+    flex: 1 1 17.5rem;
   }
 
   &__search-icon,
   &__create-icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
   }
 
   &__search-icon {
@@ -246,10 +246,10 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   }
 
   &__create {
-    width: 28px;
-    min-width: 28px;
-    height: 28px;
-    min-height: 28px;
+    width: 1.75rem;
+    min-width: 1.75rem;
+    height: 1.75rem;
+    min-height: 1.75rem;
     padding: 0;
   }
 
@@ -267,7 +267,7 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 61.25rem) {
   .employees-toolbar {
     flex-direction: column;
     align-items: stretch;
@@ -286,12 +286,12 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 45rem) {
   .employees-toolbar {
     &__filters {
       flex-direction: column;
       align-items: stretch;
-      gap: 12px;
+      gap: 0.75rem;
     }
 
     &__group {

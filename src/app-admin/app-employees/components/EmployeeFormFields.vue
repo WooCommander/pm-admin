@@ -236,21 +236,21 @@ const avatarButtonIcon = computed(() => (props.modelValue.avatarUrl ? ArrowPathI
 .employee-form-fields {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 1.375rem;
 
   &__avatar-wrap {
     position: relative;
     display: flex;
     justify-content: center;
-    padding-top: 2px;
+    padding-top: 0.125rem;
   }
 
   &__avatar {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 82px;
-    height: 82px;
+    width: 5.125rem;
+    height: 5.125rem;
     border-radius: 50%;
     background: #f7f7fa;
     overflow: hidden;
@@ -272,50 +272,50 @@ const avatarButtonIcon = computed(() => (props.modelValue.avatarUrl ? ArrowPathI
   }
 
   &__avatar-placeholder-icon {
-    width: 42px;
-    height: 42px;
+    width: 2.625rem;
+    height: 2.625rem;
   }
 
   &__avatar-button {
     position: absolute;
     top: 0;
-    left: calc(50% + 12px);
-    width: 28px;
-    min-width: 28px;
-    height: 28px;
-    min-height: 28px;
+    left: calc(50% + 0.75rem);
+    width: 1.75rem;
+    min-width: 1.75rem;
+    height: 1.75rem;
+    min-height: 1.75rem;
     padding: 0;
   }
 
   &__avatar-button-icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
   }
 
   &__grid {
     display: grid;
-    gap: 14px;
+    gap: 0.875rem;
   }
 
   &__email-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 40px;
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr) 2.5rem;
+    gap: 0.5rem;
     align-items: start;
   }
 
   &__copy-button {
-    width: 40px;
-    min-width: 40px;
-    height: 40px;
-    min-height: 40px;
+    width: 2.5rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    min-height: 2.5rem;
     padding: 0;
-    margin-top: 2px;
+    margin-top: 0.125rem;
   }
 
   &__copy-icon {
-    width: 18px;
-    height: 18px;
+    width: 1.125rem;
+    height: 1.125rem;
   }
 
   &__select-trigger {
@@ -324,10 +324,10 @@ const avatarButtonIcon = computed(() => (props.modelValue.avatarUrl ? ArrowPathI
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     width: 100%;
-    min-height: 48px;
-    padding: 8px 14px;
-    border: 1px solid #e8e8ee;
-    border-radius: 8px;
+    min-height: 3rem;
+    padding: 0.5rem 0.875rem;
+    border: 0.0625rem solid #e8e8ee;
+    border-radius: 0.5rem;
     background: #f4f5f8;
     text-align: left;
     cursor: pointer;
@@ -335,25 +335,25 @@ const avatarButtonIcon = computed(() => (props.modelValue.avatarUrl ? ArrowPathI
 
   &__select-label {
     grid-column: 1;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 0.75rem;
+    line-height: 1rem;
     color: #7f8693;
   }
 
   &__select-value,
   &__select-status {
     grid-column: 1;
-    margin-top: 2px;
+    margin-top: 0.125rem;
     color: #232931;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 
   &__select-chevron {
     grid-column: 2;
     grid-row: 1 / span 2;
-    width: 18px;
-    height: 18px;
+    width: 1.125rem;
+    height: 1.125rem;
     color: #6f747d;
   }
 
@@ -361,8 +361,8 @@ const avatarButtonIcon = computed(() => (props.modelValue.avatarUrl ? ArrowPathI
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 38px;
-    padding: 8px 12px;
+    min-height: 2.375rem;
+    padding: 0.5rem 0.75rem;
     border: 0;
     background: transparent;
     text-align: left;
@@ -370,8 +370,8 @@ const avatarButtonIcon = computed(() => (props.modelValue.avatarUrl ? ArrowPathI
   }
 
   &__option--text {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: #232931;
   }
 
@@ -389,9 +389,9 @@ const avatarButtonIcon = computed(() => (props.modelValue.avatarUrl ? ArrowPathI
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .employee-form-fields {
-    gap: 18px;
+    gap: 1.125rem;
 
     &__email-row {
       grid-template-columns: minmax(0, 1fr);

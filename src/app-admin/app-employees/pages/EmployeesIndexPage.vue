@@ -158,28 +158,28 @@ const submitEdit = () => {
 
 <style lang="scss" scoped>
 .employees-page {
-  padding: 22px;
+  padding: 1.375rem;
 
   &__surface {
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    min-height: calc(100vh - 100px);
-    padding: 22px;
-    border: 1px solid #eceef2;
-    border-radius: 18px;
+    gap: 1.125rem;
+    min-height: calc(100vh - 6.25rem);
+    padding: 1.375rem;
+    border: 0.0625rem solid #eceef2;
+    border-radius: 1.125rem;
     background: #ffffff;
-    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    box-shadow: 0 0.0625rem 0.125rem rgba(16, 24, 40, 0.04);
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 56.25rem) {
   .employees-page {
-    padding: 16px;
+    padding: 1rem;
 
     &__surface {
-      padding: 16px;
-      border-radius: 14px;
+      padding: 1rem;
+      border-radius: 0.875rem;
     }
   }
 }

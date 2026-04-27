@@ -17,7 +17,7 @@ type PageSizeOption = ITirPmDropdownOption & {
   label: string
 }
 
-const TABLE_COLUMNS = ['52px', 'minmax(440px, 1.9fr)', 'minmax(180px, 0.8fr)', 'minmax(260px, 1fr)']
+const TABLE_COLUMNS = ['3.25rem', 'minmax(27.5rem, 1.9fr)', 'minmax(11.25rem, 0.8fr)', 'minmax(16.25rem, 1fr)']
 
 const props = defineProps<{
   employees: EmployeeListItemModel[]
@@ -153,25 +153,25 @@ const copyEmail = async (email: string) => {
 .employees-table {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem;
 
   &__scroller {
     overflow-x: auto;
   }
 
   &__grid {
-    min-width: 940px;
+    min-width: 58.75rem;
     --tir-pm-table-container__padding: 0;
     --tir-pm-table-grid__gap: 0;
     --tir-pm-table-grid-header__padding: 0;
     --tir-pm-table-grid-tr__padding: 0;
-    --tir-pm-table-grid-th__padding: 10px 14px;
-    --tir-pm-table-grid-td__padding: 4px 14px;
+    --tir-pm-table-grid-th__padding: 0.625rem 0.875rem;
+    --tir-pm-table-grid-td__padding: 0.25rem 0.875rem;
   }
 
   &__avatar {
-    width: 24px;
-    height: 24px;
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 50%;
     object-fit: cover;
     flex: 0 0 auto;
@@ -214,21 +214,21 @@ const copyEmail = async (email: string) => {
   }
 
   &__copy-icon {
-    width: 14px;
-    height: 14px;
+    width: 0.875rem;
+    height: 0.875rem;
   }
 
   &__footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 1rem;
   }
 
   &__page-size-trigger {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 0.25rem;
     padding: 0;
     border: 0;
     background: transparent;
@@ -237,14 +237,14 @@ const copyEmail = async (email: string) => {
 
   &__page-size-label {
     color: #232931;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     white-space: nowrap;
   }
 
   &__page-size-chevron {
-    width: 14px;
-    height: 14px;
+    width: 0.875rem;
+    height: 0.875rem;
     color: #6f747d;
   }
 
@@ -252,8 +252,8 @@ const copyEmail = async (email: string) => {
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 32px;
-    padding: 6px 10px;
+    min-height: 2rem;
+    padding: 0.375rem 0.625rem;
     border: 0;
     background: transparent;
     text-align: left;
@@ -261,8 +261,8 @@ const copyEmail = async (email: string) => {
   }
 
   :deep(.table-grid-tr) {
-    min-height: 40px;
-    height: 40px;
+    min-height: 2.5rem;
+    height: 2.5rem;
   }
 
   :deep(.table-grid-td),
@@ -281,7 +281,7 @@ const copyEmail = async (email: string) => {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 56.25rem) {
   .employees-table {
     &__footer {
       flex-direction: column;

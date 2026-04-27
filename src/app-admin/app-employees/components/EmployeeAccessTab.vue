@@ -192,35 +192,35 @@ const sendInvite = async () => {
 .employee-access-tab {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 190px);
+  min-height: calc(100vh - 11.875rem);
 
   &__top {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 12px;
+    gap: 0.75rem;
     align-items: start;
   }
 
   &__invite-card {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 0.25rem;
   }
 
   &__invite-main {
     display: grid;
-    grid-template-columns: 16px minmax(0, 1fr);
-    gap: 10px;
+    grid-template-columns: 1rem minmax(0, 1fr);
+    gap: 0.625rem;
     align-items: center;
-    min-height: 40px;
-    padding: 10px 12px;
-    border-radius: 8px;
+    min-height: 2.5rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.5rem;
     background: #f4f5f8;
   }
 
   &__info-icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     color: #232931;
   }
 
@@ -232,83 +232,83 @@ const sendInvite = async () => {
 
   &__invite-label {
     color: #8a9099;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 0.75rem;
+    line-height: 1rem;
   }
 
   &__invite-value {
     overflow: hidden;
     color: #3b414b;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   &__invite-meta {
     color: #8a9099;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 0.75rem;
+    line-height: 1rem;
   }
 
   &__actions {
     display: flex;
-    gap: 10px;
+    gap: 0.625rem;
   }
 
   &__icon-button {
-    width: 40px;
-    min-width: 40px;
-    height: 40px;
-    min-height: 40px;
+    width: 2.5rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    min-height: 2.5rem;
     padding: 0;
   }
 
   &__action-icon {
-    width: 18px;
-    height: 18px;
+    width: 1.125rem;
+    height: 1.125rem;
   }
 
   &__messages {
-    margin-top: 18px;
+    margin-top: 1.125rem;
   }
 
   &__warning-box {
-    padding: 14px 14px 12px;
-    border: 1px solid #f1a23c;
-    border-radius: 12px;
+    padding: 0.875rem 0.875rem 0.75rem;
+    border: 0.0625rem solid #f1a23c;
+    border-radius: 0.75rem;
     background: #fff4e6;
   }
 
   &__warning-content {
     display: grid;
-    grid-template-columns: 18px minmax(0, 1fr);
-    gap: 10px;
+    grid-template-columns: 1.125rem minmax(0, 1fr);
+    gap: 0.625rem;
     align-items: start;
   }
 
   &__warning-icon {
-    width: 18px;
-    height: 18px;
+    width: 1.125rem;
+    height: 1.125rem;
     color: #ec8b11;
   }
 
   &__warning-text {
     color: #3b414b;
-    font-size: 13px;
-    line-height: 20px;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
   }
 
   &__warning-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 14px;
-    margin-left: 28px;
+    gap: 0.625rem;
+    margin-top: 0.875rem;
+    margin-left: 1.75rem;
   }
 
   &__status-box {
-    padding: 14px;
-    border-radius: 12px;
+    padding: 0.875rem;
+    border-radius: 0.75rem;
     background: #f7f7fb;
   }
 
@@ -316,13 +316,13 @@ const sendInvite = async () => {
     --tir-pm-system-message__width: 100%;
     --tir-pm-system-message__text-align: left;
     --tir-pm-system-message-more-desc__margin-bottom: 0;
-    --tir-pm-system-message-more-desc__font-size: 13px;
+    --tir-pm-system-message-more-desc__font-size: 0.8125rem;
     --tir-pm-system-message-more-desc__color: #3b414b;
   }
 
   &__bottom {
     margin-top: auto;
-    padding-top: 28px;
+    padding-top: 1.75rem;
   }
 
   &__invite-button {
@@ -331,19 +331,19 @@ const sendInvite = async () => {
   }
 
   &__invite-button-icon {
-    width: 18px;
-    height: 18px;
+    width: 1.125rem;
+    height: 1.125rem;
   }
 
   &__copy-state {
-    margin-top: 12px;
+    margin-top: 0.75rem;
     color: #1d9b47;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 0.75rem;
+    line-height: 1rem;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .employee-access-tab {
     min-height: auto;
 
