@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { TirPmSearchInput } from 'tir-components';
-import { TirPmButton } from 'tir-pm-button';
+import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button';
 import type { ITirPmDropdownOption } from 'tir-pm-dropdown';
 import { TirPmDropdown, TirPmDropdownSizeEnum } from 'tir-pm-dropdown';
 import { ChevronDownIcon, PlusIcon } from 'tir-style-system/icons/outline';
@@ -137,7 +137,7 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
       <TirPmSearchInput
         :model-value="filters.search"
         class="employees-toolbar__search"
-        label=""
+        label="Поиск..."
         is-small
         :is-with-popup="false"
         placeholder="Поиск по сотрудникам"
@@ -149,9 +149,13 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
     <TirPmButton
       class="employees-toolbar__create"
       :is-disabled="isCreateDisabled"
+      :variant="TirPmButtonVariantEnum.PrimaryState"
+      :size="TirPmButtonSizeEnum.Small"
       @click="emit('create')"
     >
-      <PlusIcon class="employees-toolbar__create-icon" />
+      <template #leftSlot>
+        <PlusIcon class="employees-toolbar__create-icon" />
+      </template>
     </TirPmButton>
   </div>
 </template>

@@ -1,41 +1,37 @@
 <script setup lang="ts">
-import {
-  TirPmButton,
-  TirPmButtonSizeEnum,
-  TirPmButtonVariantEnum,
-} from 'tir-pm-button'
-import { TirPmDrawer, TirPmDrawerPositionEnum } from 'tir-pm-drawer'
-import { TirPmTab, TirPmTabs, TirPmTabsVariantEnum } from 'tir-pm-tabs'
-import { XMarkIcon } from 'tir-style-system/icons/outline'
-import { ref, watch } from 'vue'
+import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button';
+import { TirPmDrawer, TirPmDrawerPositionEnum } from 'tir-pm-drawer';
+import { TirPmTab, TirPmTabs, TirPmTabsVariantEnum } from 'tir-pm-tabs';
+import { XMarkIcon } from 'tir-style-system/icons/outline';
+import { ref, watch } from 'vue';
 
-import type { EmployeeFormModel } from '../models'
-import EmployeeAccessTab from './EmployeeAccessTab.vue'
-import EmployeeFormFields from './EmployeeFormFields.vue'
+import type { EmployeeFormModel } from '../models';
+import EmployeeAccessTab from './EmployeeAccessTab.vue';
+import EmployeeFormFields from './EmployeeFormFields.vue';
 
 const props = defineProps<{
-  visible: boolean
-  form: EmployeeFormModel
-  isSubmitDisabled: boolean
-}>()
+  visible: boolean;
+  form: EmployeeFormModel;
+  isSubmitDisabled: boolean;
+}>();
 
 const emit = defineEmits<{
-  (e: 'update:visible', value: boolean): void
-  (e: 'update:form', value: EmployeeFormModel): void
-  (e: 'submit'): void
-  (e: 'cancel'): void
-}>()
+  (e: 'update:visible', value: boolean): void;
+  (e: 'update:form', value: EmployeeFormModel): void;
+  (e: 'submit'): void;
+  (e: 'cancel'): void;
+}>();
 
-type EmployeeProfileTab = 'details' | 'team' | 'access'
+type EmployeeProfileTab = 'details' | 'team' | 'access';
 
-const activeTab = ref<EmployeeProfileTab>('details')
+const activeTab = ref<EmployeeProfileTab>('details');
 
 watch(
   () => props.visible,
   (visible) => {
-    if (visible) activeTab.value = 'details'
+    if (visible) activeTab.value = 'details';
   },
-)
+);
 </script>
 
 <template>
@@ -51,11 +47,7 @@ watch(
         <header class="employee-profile-drawer__header">
           <h2 class="employee-profile-drawer__title">Профиль сотрудника</h2>
 
-          <button
-            type="button"
-            class="employee-profile-drawer__close"
-            @click="emit('cancel')"
-          >
+          <button type="button" class="employee-profile-drawer__close" @click="emit('cancel')">
             <XMarkIcon class="employee-profile-drawer__close-icon" />
           </button>
         </header>
@@ -88,21 +80,16 @@ watch(
 
           <div v-else class="employee-profile-drawer__placeholder">
             <div class="employee-profile-drawer__placeholder-card">
-              <p class="employee-profile-drawer__placeholder-title">
-                Управление командой
-              </p>
+              <p class="employee-profile-drawer__placeholder-title">Управление командой</p>
               <p class="employee-profile-drawer__placeholder-text">
-                Этот блок вынесен в следующий этап, чтобы не смешивать детали профиля
-                с командной логикой.
+                Этот блок вынесен в следующий этап, чтобы не смешивать детали профиля с командной
+                логикой.
               </p>
             </div>
           </div>
         </div>
 
-        <footer
-          v-if="activeTab === 'details'"
-          class="employee-profile-drawer__footer"
-        >
+        <footer v-if="activeTab === 'details'" class="employee-profile-drawer__footer">
           <TirPmButton
             :variant="TirPmButtonVariantEnum.PrimaryState"
             :size="TirPmButtonSizeEnum.Regular"
@@ -174,10 +161,6 @@ watch(
 
   &__tabs {
     margin-bottom: 24px;
-  }
-
-  &__tab-content {
-    min-height: 0;
   }
 
   &__placeholder {

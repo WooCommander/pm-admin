@@ -113,7 +113,6 @@ const copyEmail = async (email: string) => {
 
     <div class="employees-table__footer">
       <TirPmDropdown
-        class="employees-table__page-size-dropdown"
         :options="pageSizeOptions"
         :selected-option="selectedPageSizeOption"
         :size="TirPmDropdownSizeEnum.Light"
@@ -154,7 +153,7 @@ const copyEmail = async (email: string) => {
 .employees-table {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 
   &__scroller {
     overflow-x: auto;
@@ -167,7 +166,7 @@ const copyEmail = async (email: string) => {
     --tir-pm-table-grid-header__padding: 0;
     --tir-pm-table-grid-tr__padding: 0;
     --tir-pm-table-grid-th__padding: 10px 14px;
-    --tir-pm-table-grid-td__padding: 8px 14px;
+    --tir-pm-table-grid-td__padding: 4px 14px;
   }
 
   &__avatar {
@@ -182,7 +181,7 @@ const copyEmail = async (email: string) => {
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--text-primary);
+    color: #232931;
     font: inherit;
     text-align: left;
     cursor: pointer;
@@ -193,7 +192,7 @@ const copyEmail = async (email: string) => {
   }
 
   &__role {
-    color: var(--text-primary);
+    color: #232931;
   }
 
   &__email-link {
@@ -210,7 +209,7 @@ const copyEmail = async (email: string) => {
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--text-secondary);
+    color: #6f747d;
     cursor: pointer;
   }
 
@@ -237,7 +236,7 @@ const copyEmail = async (email: string) => {
   }
 
   &__page-size-label {
-    color: var(--text-primary);
+    color: #232931;
     font-size: 14px;
     line-height: 20px;
     white-space: nowrap;
@@ -246,7 +245,7 @@ const copyEmail = async (email: string) => {
   &__page-size-chevron {
     width: 14px;
     height: 14px;
-    color: var(--text-secondary);
+    color: #6f747d;
   }
 
   &__page-size-option {
@@ -263,6 +262,13 @@ const copyEmail = async (email: string) => {
 
   :deep(.table-grid-tr) {
     min-height: 40px;
+    height: 40px;
+  }
+
+  :deep(.table-grid-td),
+  :deep(.table-grid-th) {
+    display: flex;
+    align-items: center;
   }
 
   :deep(.tir-popover_content .inner),
