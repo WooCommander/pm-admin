@@ -33,7 +33,31 @@ export default {
         loader: 'vue-loader',
       },
       {
-        test: /\.[jt]sx?$/,
+        test: /\.ts$/,
+        include: [
+          path.resolve(__dirname, 'src'),
+          /[\\/]node_modules[\\/]tir-pm-/,
+          /[\\/]node_modules[\\/]tir-style-system/,
+          /[\\/]node_modules[\\/]tir-pm-toolkit/,
+        ],
+        resolve: {
+          fullySpecified: false,
+        },
+        type: 'javascript/auto',
+        loader: 'esbuild-loader',
+        options: {
+          loader: 'ts',
+          target: 'es2020',
+          tsconfigRaw: {
+            compilerOptions: {
+              useDefineForClassFields: true,
+              isolatedModules: true,
+            },
+          },
+        },
+      },
+      {
+        test: /\.tsx$/,
         include: [
           path.resolve(__dirname, 'src'),
           /[\\/]node_modules[\\/]tir-pm-/,
@@ -55,6 +79,18 @@ export default {
             },
           },
         },
+      },
+      {
+        test: /\.[cm]?js$/,
+        include: [
+          /[\\/]node_modules[\\/]tir-pm-/,
+          /[\\/]node_modules[\\/]tir-style-system/,
+          /[\\/]node_modules[\\/]tir-pm-toolkit/,
+        ],
+        resolve: {
+          fullySpecified: false,
+        },
+        type: 'javascript/auto',
       },
       {
         test: /\.scss$/,
@@ -122,8 +158,9 @@ export default {
     }),
   ],
   devServer: {
-    host: '127.0.0.1',
+    host: '0.0.0.0',
     port: 5179,
+    allowedHosts: 'all',
     historyApiFallback: true,
     hot: true,
     static: {
