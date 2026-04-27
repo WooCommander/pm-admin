@@ -7,6 +7,7 @@ import { TirPmIconViewStyleVars } from 'tir-pm-icon-view'
 import { TirPmInputStyleVars } from 'tir-pm-input'
 import { TirPmPaginationStyleVars } from 'tir-pm-pagination'
 import { TirPmPlateStyleVars } from 'tir-pm-plate'
+import { TirPmPopoverStyleVars } from 'tir-pm-popover'
 import { TirPmSelectStyleVars } from 'tir-pm-select'
 import { TirPmStatusBudgeStyleVars } from 'tir-pm-status-budge'
 import { TirPmSystemMessageStyleVars } from 'tir-pm-system-message'
@@ -27,6 +28,7 @@ TirPmInputStyleVars.setVars(new TirPmInputStyleVars())
 TirPmButtonStyleVars.setVars(new TirPmButtonStyleVars())
 TirPmDrawerVars.setVars(new TirPmDrawerVars())
 TirPmDropdownStyleVars.setVars(new TirPmDropdownStyleVars())
+TirPmPopoverStyleVars.setVars(new TirPmPopoverStyleVars())
 TirPmIconViewStyleVars.setVars(new TirPmIconViewStyleVars())
 TirPmPaginationStyleVars.setVars(new TirPmPaginationStyleVars())
 TirPmPlateStyleVars.setVars(new TirPmPlateStyleVars())

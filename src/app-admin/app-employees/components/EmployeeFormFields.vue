@@ -379,6 +379,11 @@ const avatarButtonIcon = computed(() => (props.modelValue.avatarUrl ? ArrowPathI
     width: 100%;
   }
 
+  :deep(.tir-popover_content .inner),
+  :deep(.tir-pm-dropdown__popover-content) {
+    background: #ffffff;
+  }
+
   :deep(.tir-popover_element) {
     width: 100%;
   }

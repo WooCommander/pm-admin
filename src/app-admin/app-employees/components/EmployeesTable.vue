@@ -265,6 +265,11 @@ const copyEmail = async (email: string) => {
     min-height: 40px;
   }
 
+  :deep(.tir-popover_content .inner),
+  :deep(.tir-pm-dropdown__popover-content) {
+    background: #ffffff;
+  }
+
   :deep(.tir-pm-dropdown) {
     width: auto;
   }

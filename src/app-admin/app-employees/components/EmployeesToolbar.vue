@@ -253,6 +253,11 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
     width: auto;
   }
 
+  :deep(.tir-popover_content .inner),
+  :deep(.tir-pm-dropdown__popover-content) {
+    background: #ffffff;
+  }
+
   :deep(.tir-popover_element) {
     min-width: 0;
   }
