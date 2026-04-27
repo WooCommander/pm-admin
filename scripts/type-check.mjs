@@ -7,7 +7,10 @@ import { spawn } from 'node:child_process'
 const tsc = spawn(
   process.platform === 'win32' ? 'npx.cmd' : 'npx',
   ['vue-tsc', '--noEmit'],
-  { stdio: ['inherit', 'pipe', 'pipe'] },
+  { 
+    stdio: ['inherit', 'pipe', 'pipe'],
+    shell: process.platform === 'win32' 
+  },
 )
 
 let stdout = ''
@@ -16,7 +19,7 @@ tsc.stderr.on('data', (c) => (stdout += c.toString()))
 
 tsc.on('close', () => {
   const lines = stdout.split(/\r?\n/)
-  const ownErrors = lines.filter((l) => l.startsWith('src/') || l.startsWith('env.d.ts') || l.startsWith('vite.config.ts'))
+  const ownErrors = lines.filter((l) => l.startsWith('src/') || l.startsWith('env.d.ts') || l.startsWith('webpack.config.js'))
   if (ownErrors.length) {
     console.error(ownErrors.join('\n'))
     console.error(`\n✗ type-check failed: ${ownErrors.length} error(s) in project sources.`)
