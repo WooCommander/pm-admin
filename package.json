@@ -18,11 +18,11 @@
   },
   "dependencies": {
     "js-cookie": "^3.0.5",
-    "tir-components": "^1.0.149",
+    "tir-components": "^1.0.150",
     "tir-pm-toolkit": "^1.0.11",
-    "tir-style-system": "^1.1.7",
-    "vue": "^3.5.21",
-    "vue-router": "^4.5.1"
+    "tir-style-system": "^1.1.8",
+    "vue": "^3.5.33",
+    "vue-router": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",

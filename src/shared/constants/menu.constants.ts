@@ -1,5 +1,3 @@
-import type { Component } from 'vue'
-
 import {
   ChartBarIcon,
   FunnelIcon,
@@ -8,6 +6,7 @@ import {
   UserCircleIcon,
   UsersIcon,
 } from 'tir-style-system/icons/outline'
+import type { Component } from 'vue'
 
 export type MenuGroup = 'primary' | 'admin'
 
