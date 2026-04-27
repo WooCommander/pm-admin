@@ -6,7 +6,6 @@ export interface MarketingFiltersModel {
   dateFrom: string | null
   dateTo: string | null
   statusTab: MarketingStatusTab
-  employee: string | null
   search: string
 }
 
@@ -15,6 +14,5 @@ export const createEmptyMarketingFilters = (): MarketingFiltersModel => ({
   dateFrom: null,
   dateTo: null,
   statusTab: 'all',
-  employee: null,
   search: '',
 })

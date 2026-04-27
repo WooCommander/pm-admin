@@ -17,8 +17,7 @@ onMounted(() => {
   void service.loadInitialData()
 })
 
-// ── Фильтрация ─────────────────────────────────────────────────────────────
-
+// Фильтрация
 const filteredLinks = computed(() => {
   const { statusTab, search } = state.filters
   return state.links.filter((link) => {
@@ -32,24 +31,22 @@ const filteredLinks = computed(() => {
       !q ||
       link.link.toLowerCase().includes(q) ||
       link.campaignName.toLowerCase().includes(q) ||
-      link.employeeName.toLowerCase().includes(q)
+      link.channel.toLowerCase().includes(q)
 
     return matchStatus && matchSearch
   })
 })
-
-// ── Обработчики ────────────────────────────────────────────────────────────
 
 function onUpdateFilters(patch: Partial<MarketingFiltersModel>): void {
   service.patchFilters(patch)
 }
 
 function onApply(): void {
-  // Заглушка — в реальном API тут перезагрузка данных с новыми датами
+  // Заглушка — здесь будет перезагрузка данных с новыми датами
 }
 
 function onAdd(): void {
-  // Заглушка — откроет модалку создания ссылки (M-6)
+  // Заглушка — откроет модальку создания ссылки
 }
 </script>
 
@@ -71,7 +68,7 @@ function onAdd(): void {
       />
     </div>
 
-    <!-- Строка фильтров: пилли + селект + поиск + добавить -->
+    <!-- Строка фильтров: вкладки + поиск + добавить -->
     <MarketingFilterBar
       :filters="state.filters"
       @update:filters="onUpdateFilters"

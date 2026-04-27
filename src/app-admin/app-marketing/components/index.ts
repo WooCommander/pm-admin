@@ -1,3 +1,4 @@
+export { default as MarketingDatePicker } from './MarketingDatePicker.vue'
 export { default as MarketingFilterBar } from './MarketingFilterBar.vue'
 export { default as MarketingLinksTable } from './MarketingLinksTable.vue'
 export { default as MarketingOverlay } from './MarketingOverlay.vue'

@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button'
+import { TirPmInput, TirPmInputSizeEnum } from 'tir-pm-input'
+import { CalendarDaysIcon } from 'tir-style-system/icons/outline'
+import { ref } from 'vue'
+
 import type { MarketingFiltersModel, MarketingPrimaryTab } from '../models'
+import MarketingDatePicker from './MarketingDatePicker.vue'
 
 interface Props {
   filters: MarketingFiltersModel
@@ -18,16 +24,24 @@ const TABS: { key: MarketingPrimaryTab; label: string }[] = [
   { key: 'personal', label: 'Моя статистика' },
 ]
 
+// Попап: null | 'from' | 'to'
+const openPicker = ref<null | 'from' | 'to'>(null)
+
 function selectTab(key: MarketingPrimaryTab): void {
   emit('update:filters', { primaryTab: key })
 }
 
-function onDateFromInput(e: Event): void {
-  emit('update:filters', { dateFrom: (e.target as HTMLInputElement).value || null })
+function togglePicker(field: 'from' | 'to'): void {
+  openPicker.value = openPicker.value === field ? null : field
 }
 
-function onDateToInput(e: Event): void {
-  emit('update:filters', { dateTo: (e.target as HTMLInputElement).value || null })
+function onPickerApply(): void {
+  openPicker.value = null
+  emit('apply')
+}
+
+function onApply(): void {
+  emit('apply')
 }
 </script>
 
@@ -51,48 +65,81 @@ function onDateToInput(e: Event): void {
       </button>
     </div>
 
-    <!-- Строка с датами + кнопкой -->
+    <!-- Строка: даты + Применить -->
     <div class="overlay__controls">
-      <div class="overlay__date-input">
-        <input
-          class="overlay__date-field"
-          type="text"
-          :value="props.filters.dateFrom ?? ''"
+      <!-- Дата начала -->
+      <div class="overlay__date-wrap">
+        <TirPmInput
+          :model-value="props.filters.dateFrom ?? ''"
+          label=""
           placeholder="Дата и время начала"
-          @input="onDateFromInput"
-        />
-        <span class="overlay__date-icon">
-          <!-- calendar icon -->
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="4" width="18" height="18" rx="3" stroke="#686c73" stroke-width="1.5"/>
-            <path d="M3 9H21" stroke="#686c73" stroke-width="1.5"/>
-            <path d="M8 2V5" stroke="#686c73" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M16 2V5" stroke="#686c73" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </span>
+          :size="TirPmInputSizeEnum.Middle"
+          :is-with-hint="false"
+          class="overlay__date-input"
+          @update:model-value="emit('update:filters', { dateFrom: String($event) || null })"
+          @click.stop="togglePicker('from')"
+        >
+          <template #leftInputAddons>
+            <CalendarDaysIcon class="overlay__date-icon" />
+          </template>
+        </TirPmInput>
+
+        <div
+          v-if="openPicker === 'from'"
+          class="overlay__picker-popup"
+          @click.stop
+        >
+          <MarketingDatePicker
+            :date-from="props.filters.dateFrom"
+            :date-to="props.filters.dateTo"
+            @update:date-from="emit('update:filters', { dateFrom: $event })"
+            @update:date-to="emit('update:filters', { dateTo: $event })"
+            @apply="onPickerApply"
+          />
+        </div>
       </div>
 
-      <div class="overlay__date-input">
-        <input
-          class="overlay__date-field"
-          type="text"
-          :value="props.filters.dateTo ?? ''"
+      <!-- Дата окончания -->
+      <div class="overlay__date-wrap">
+        <TirPmInput
+          :model-value="props.filters.dateTo ?? ''"
+          label=""
           placeholder="Дата и время окончания"
-          @input="onDateToInput"
-        />
-        <span class="overlay__date-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="4" width="18" height="18" rx="3" stroke="#686c73" stroke-width="1.5"/>
-            <path d="M3 9H21" stroke="#686c73" stroke-width="1.5"/>
-            <path d="M8 2V5" stroke="#686c73" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M16 2V5" stroke="#686c73" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </span>
+          :size="TirPmInputSizeEnum.Middle"
+          :is-with-hint="false"
+          class="overlay__date-input"
+          @update:model-value="emit('update:filters', { dateTo: String($event) || null })"
+          @click.stop="togglePicker('to')"
+        >
+          <template #leftInputAddons>
+            <CalendarDaysIcon class="overlay__date-icon" />
+          </template>
+        </TirPmInput>
+
+        <div
+          v-if="openPicker === 'to'"
+          class="overlay__picker-popup"
+          @click.stop
+        >
+          <MarketingDatePicker
+            :date-from="props.filters.dateFrom"
+            :date-to="props.filters.dateTo"
+            @update:date-from="emit('update:filters', { dateFrom: $event })"
+            @update:date-to="emit('update:filters', { dateTo: $event })"
+            @apply="onPickerApply"
+          />
+        </div>
       </div>
 
-      <button class="overlay__apply-btn" type="button" @click="emit('apply')">
+      <!-- Применить -->
+      <TirPmButton
+        class="overlay__apply-btn"
+        :variant="TirPmButtonVariantEnum.PrimaryState"
+        :size="TirPmButtonSizeEnum.Middle"
+        @click="onApply"
+      >
         Применить
-      </button>
+      </TirPmButton>
     </div>
   </div>
 </template>
@@ -100,23 +147,22 @@ function onDateToInput(e: Event): void {
 <style lang="scss" scoped>
 .overlay {
   background: var(--bg-base, #fff);
-  border-radius: 8px 8px 0 0;
   padding: 28px 28px 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 
-  // ── Вкладки ───────────────────────────────────────────────────────────────
-
+  // Вкладки
   &__tabs {
     display: flex;
-    gap: 24px;
+    gap: 0;
     border-bottom: 1px solid var(--neutral-30, #bfc0c3);
   }
 
   &__tab {
     position: relative;
-    padding: 0 0 8px;
+    padding: 0 4px 8px;
+    margin-right: 24px;
     background: none;
     border: none;
     cursor: pointer;
@@ -149,77 +195,39 @@ function onDateToInput(e: Event): void {
     border-radius: 2px 2px 0 0;
   }
 
-  // ── Строка управления ─────────────────────────────────────────────────────
-
+  // Строка с датами
   &__controls {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
   }
 
-  &__date-input {
-    flex: 1 1 0;
-    min-width: 0;
-    position: relative;
-    display: flex;
-    align-items: center;
-    background: var(--neutral-10, #eaeaeb);
-    border-radius: 8px;
-    height: 48px;
-  }
-
-  &__date-field {
+  &__date-wrap {
     flex: 1;
     min-width: 0;
-    height: 100%;
-    padding: 0 12px;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    line-height: 20px;
-    color: var(--text-primary, #272d37);
+    position: relative;
+  }
 
-    &::placeholder {
-      color: var(--text-secondary, #686c73);
-    }
+  &__date-input {
+    width: 100%;
   }
 
   &__date-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 100%;
-    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
     color: var(--text-secondary, #686c73);
   }
 
+  &__picker-popup {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 100;
+  }
+
   &__apply-btn {
-    height: 48px;
-    padding: 0 20px;
-    background: var(--neutral-100, #272d37);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    white-space: nowrap;
     flex-shrink: 0;
-    transition: opacity 0.15s;
-
-    &:hover {
-      opacity: 0.88;
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--text-info, #2a77ef);
-      outline-offset: 2px;
-    }
+    align-self: flex-end;
   }
 }
 </style>
