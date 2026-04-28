@@ -83,13 +83,13 @@ function selectStatus(key: MarketingStatusTab): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px 12px;
-  gap: 12px;
+  padding: 0 1.75rem 0.75rem;
+  gap: 0.75rem;
 
   &__left {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 1.5rem;
     flex: 1;
     min-width: 0;
   }
@@ -99,20 +99,20 @@ function selectStatus(key: MarketingStatusTab): void {
     display: flex;
     align-items: center;
     gap: 0;
-    width: 264px;
+    width: 16.5rem;
     flex-shrink: 0;
-    border-bottom: 1px solid var(--neutral-30, #bfc0c3);
+    border-bottom: 0.0625rem solid var(--neutral-30, #bfc0c3);
   }
 
   &__tab {
     position: relative;
-    padding: 0 12px 8px;
+    padding: 0 0.75rem 0.5rem;
     background: none;
     border: none;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--text-secondary, #686c73);
     font-weight: 400;
     white-space: nowrap;
@@ -124,38 +124,38 @@ function selectStatus(key: MarketingStatusTab): void {
     }
 
     &:focus-visible {
-      outline: 2px solid var(--text-info, #2a77ef);
-      outline-offset: 2px;
-      border-radius: 2px;
+      outline: 0.125rem solid var(--text-info, #2a77ef);
+      outline-offset: 0.125rem;
+      border-radius: 0.125rem;
     }
   }
 
   &__tab-underline {
     position: absolute;
-    bottom: -1px;
+    bottom: -0.0625rem;
     left: 0;
     right: 0;
-    height: 2px;
+    height: 0.125rem;
     background: var(--text-info, #2a77ef);
-    border-radius: 2px 2px 0 0;
+    border-radius: 0.125rem 0.125rem 0 0;
   }
 
   // Поиск
   &__search {
-    width: 316px;
+    width: 19.75rem;
     flex-shrink: 0;
   }
 
   &__search-icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     color: var(--text-secondary, #686c73);
   }
 
   // Кнопка +
   &__add-btn {
-    width: 32px;
-    height: 32px;
+    width: 2rem;
+    height: 2rem;
     padding: 0;
     display: flex;
     align-items: center;
@@ -164,8 +164,8 @@ function selectStatus(key: MarketingStatusTab): void {
   }
 
   &__add-icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
   }
 }
 </style>

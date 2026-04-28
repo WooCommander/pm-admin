@@ -8,7 +8,7 @@ import { ref } from 'vue'
 import type { MarketingLinkModel, MarketingLinkStatus } from '../models'
 
 // Колонки: Название | Статус | Ссылка | Источник | Переходов | Регистраций
-const TABLE_COLUMNS = ['192px', '112px', 'minmax(0, 1fr)', '287px', '191px', '139px']
+const TABLE_COLUMNS = ['12rem', '7rem', 'minmax(0, 1fr)', '17.9375rem', '11.9375rem', '8.6875rem']
 
 const props = defineProps<{
   links: MarketingLinkModel[]
@@ -150,18 +150,18 @@ const pagedLinks = () => {
 
   &__scroller {
     overflow-x: auto;
-    padding: 0 28px;
+    padding: 0 1.75rem;
   }
 
   &__grid {
     width: 100%;
-    min-width: 1100px;
+    min-width: 68.75rem;
   }
 
   // Название кампании
   &__campaign {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--text-primary, #272d37);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -174,13 +174,13 @@ const pagedLinks = () => {
   &__status {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 0.375rem;
   }
 
   &__status-label {
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
-    line-height: 16px;
+    line-height: 1rem;
     text-transform: uppercase;
 
     .links-table__status--active & {
@@ -196,13 +196,13 @@ const pagedLinks = () => {
   &__link-cell {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
     min-width: 0;
   }
 
   &__link {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--text-info, #2a77ef);
     text-decoration: none;
     overflow: hidden;
@@ -219,11 +219,11 @@ const pagedLinks = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: 1.5rem;
+    height: 1.5rem;
     background: none;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     cursor: pointer;
     color: var(--text-secondary, #686c73);
     flex-shrink: 0;
@@ -237,22 +237,22 @@ const pagedLinks = () => {
   }
 
   &__copy-icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
   }
 
   // Источник
   &__channel {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--text-primary, #272d37);
   }
 
   // Числа
   &__number {
     font-family: 'Roboto Mono', monospace;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--text-primary, #272d37);
     font-weight: 500;
   }
@@ -271,7 +271,7 @@ const pagedLinks = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 28px;
+    padding: 0.75rem 1.75rem;
   }
 }
 </style>

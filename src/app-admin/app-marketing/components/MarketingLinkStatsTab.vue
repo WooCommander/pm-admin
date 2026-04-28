@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button'
+import { TirPmInput, TirPmInputSizeEnum } from 'tir-pm-input'
+import { CalendarDaysIcon } from 'tir-style-system/icons/outline'
 import { computed } from 'vue'
 
 import type { MarketingLinkStatsModel } from '../models'
@@ -16,30 +19,31 @@ function patch(partial: Partial<MarketingLinkStatsModel>): void {
   emit('update:modelValue', { ...props.modelValue, ...partial })
 }
 
-// --- Бар-чарт ---
+// --- Бар-чарт (SVG-координаты, единицы условные) ---
 
-const CHART_HEIGHT = 160
-const CHART_Y_LABELS = [0, 25, 50, 75, 100, 125]
-const BAR_GAP = 4
+const CHART_HEIGHT = 110
+const CHART_Y_LABELS = [125, 100, 75, 50, 25, 0]
+const BAR_GAP = 2
 
 const chartMax = computed<number>(() => {
   const dataMax = Math.max(0, ...props.modelValue.chartData.map(d => d.clicks))
-  const yMax = Math.max(...CHART_Y_LABELS)
-  return Math.max(dataMax, yMax)
+  return Math.max(dataMax, CHART_Y_LABELS[0])
 })
 
 const barWidth = computed<number>(() => {
   const count = props.modelValue.chartData.length
-  if (count === 0) return 16
-  const totalWidth = 400
+  if (count === 0) return 12
+  const totalWidth = 460
   return Math.max(8, Math.floor((totalWidth - BAR_GAP * (count - 1)) / count))
 })
 
 const chartWidth = computed<number>(() => {
   const count = props.modelValue.chartData.length
-  if (count === 0) return 400
+  if (count === 0) return 460
   return count * barWidth.value + (count - 1) * BAR_GAP
 })
+
+const viewBox = computed<string>(() => '0 0 ' + chartWidth.value + ' ' + CHART_HEIGHT)
 
 function barHeight(clicks: number): number {
   if (chartMax.value === 0) return 0
@@ -50,11 +54,30 @@ function barY(clicks: number): number {
   return CHART_HEIGHT - barHeight(clicks)
 }
 
-// --- Прогресс-бары ---
+function gridY(label: number): number {
+  return CHART_HEIGHT - Math.round((label / chartMax.value) * CHART_HEIGHT)
+}
+
+function gridLineKey(label: number): string {
+  return 'grid-' + label
+}
+
+// --- Общая статистика ---
 
 function progressPercent(value: number, total: number): number {
   if (total === 0) return 0
-  return Math.min(100, Math.round((value / total) * 100))
+  return Math.min(100, (value / total) * 100)
+}
+
+function progressPercentDisplay(value: number, total: number): string {
+  if (total === 0) return '0%'
+  const pct = (value / total) * 100
+  if (pct >= 99.95) return '100%'
+  return pct.toFixed(1) + '%'
+}
+
+function statValueDisplay(stat: { value: number; total: number }): string {
+  return stat.value.toString() + ' (' + progressPercentDisplay(stat.value, stat.total) + ')'
 }
 </script>
 
@@ -62,28 +85,40 @@ function progressPercent(value: number, total: number): number {
   <div class="stats-tab">
     <!-- Фильтр по дате -->
     <div class="stats-tab__date-row">
-      <div class="stats-tab__date-group">
-        <span class="stats-tab__date-label">С</span>
-        <input
-          type="date"
-          class="stats-tab__date-input"
-          :value="modelValue.dateFrom ?? ''"
-          @change="patch({ dateFrom: ($event.target as HTMLInputElement).value || null })"
-        />
-      </div>
-      <span class="stats-tab__date-sep">—</span>
-      <div class="stats-tab__date-group">
-        <span class="stats-tab__date-label">По</span>
-        <input
-          type="date"
-          class="stats-tab__date-input"
-          :value="modelValue.dateTo ?? ''"
-          @change="patch({ dateTo: ($event.target as HTMLInputElement).value || null })"
-        />
-      </div>
+      <TirPmInput
+        :model-value="modelValue.dateFrom ?? ''"
+        label="Дата и время начала"
+        :size="TirPmInputSizeEnum.Middle"
+        :is-with-hint="false"
+        class="stats-tab__date-input"
+        @update:model-value="patch({ dateFrom: String($event) || null })"
+      >
+        <template #rightInputAddons>
+          <CalendarDaysIcon class="stats-tab__date-icon" />
+        </template>
+      </TirPmInput>
+      <TirPmInput
+        :model-value="modelValue.dateTo ?? ''"
+        label="Дата и время окончания"
+        :size="TirPmInputSizeEnum.Middle"
+        :is-with-hint="false"
+        class="stats-tab__date-input"
+        @update:model-value="patch({ dateTo: String($event) || null })"
+      >
+        <template #rightInputAddons>
+          <CalendarDaysIcon class="stats-tab__date-icon" />
+        </template>
+      </TirPmInput>
+      <TirPmButton
+        :variant="TirPmButtonVariantEnum.PrimaryState"
+        :size="TirPmButtonSizeEnum.Middle"
+        class="stats-tab__apply-btn"
+      >
+        Применить
+      </TirPmButton>
     </div>
 
-    <!-- 4 карточки 2×2 -->
+    <!-- 4 карточки 2x2 -->
     <div
       v-if="modelValue.cards.length > 0"
       class="stats-tab__cards"
@@ -92,7 +127,6 @@ function progressPercent(value: number, total: number): number {
         v-for="card in modelValue.cards"
         :key="card.id"
         :card="card"
-        class="stats-tab__card"
       />
     </div>
 
@@ -103,22 +137,28 @@ function progressPercent(value: number, total: number): number {
     >
       <h3 class="stats-tab__section-title">Переходов по дням</h3>
       <div class="stats-tab__chart-wrap">
-        <!-- Y-labels -->
-        <div class="stats-tab__y-labels">
+        <div class="stats-tab__y-axis">
           <span
-            v-for="label in [...CHART_Y_LABELS].reverse()"
+            v-for="label in CHART_Y_LABELS"
             :key="label"
             class="stats-tab__y-label"
           >{{ label }}</span>
         </div>
-
-        <!-- SVG chart -->
         <div class="stats-tab__chart-inner">
           <svg
-            :viewBox="`0 0 ${chartWidth} ${CHART_HEIGHT}`"
+            :viewBox="viewBox"
             class="stats-tab__svg"
             preserveAspectRatio="xMinYMid meet"
           >
+            <line
+              v-for="label in CHART_Y_LABELS"
+              :key="gridLineKey(label)"
+              x1="0"
+              :y1="gridY(label)"
+              :x2="chartWidth"
+              :y2="gridY(label)"
+              class="stats-tab__grid-line"
+            />
             <rect
               v-for="(day, i) in modelValue.chartData"
               :key="day.date"
@@ -130,8 +170,6 @@ function progressPercent(value: number, total: number): number {
               class="stats-tab__bar"
             />
           </svg>
-
-          <!-- X-labels -->
           <div class="stats-tab__x-labels">
             <span
               v-for="day in modelValue.chartData"
@@ -143,13 +181,13 @@ function progressPercent(value: number, total: number): number {
       </div>
     </div>
 
-    <!-- Общая статистика (прогресс-бары) -->
+    <!-- Общая статистика -->
     <div
       v-if="modelValue.summaryStats.length > 0"
       class="stats-tab__summary"
     >
       <h3 class="stats-tab__section-title">Общая статистика</h3>
-      <div class="stats-tab__summary-list">
+      <div class="stats-tab__summary-card">
         <div
           v-for="stat in modelValue.summaryStats"
           :key="stat.label"
@@ -157,7 +195,7 @@ function progressPercent(value: number, total: number): number {
         >
           <div class="stats-tab__summary-header">
             <span class="stats-tab__summary-label">{{ stat.label }}</span>
-            <span class="stats-tab__summary-value">{{ stat.value.toLocaleString('ru-RU') }}</span>
+            <span class="stats-tab__summary-value">{{ statValueDisplay(stat) }}</span>
           </div>
           <div class="stats-tab__progress-track">
             <div
@@ -178,90 +216,73 @@ function progressPercent(value: number, total: number): number {
 .stats-tab {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 24px;
+  gap: 1.5rem;
 
   &__date-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-  }
-
-  &__date-group {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  &__date-label {
-    font-size: 14px;
-    line-height: 20px;
-    color: var(--text-secondary, #686c73);
-    white-space: nowrap;
-  }
-
-  &__date-sep {
-    font-size: 14px;
-    color: var(--text-secondary, #686c73);
-    padding: 0 2px;
+    gap: 0.75rem;
   }
 
   &__date-input {
-    height: 32px;
-    padding: 0 8px;
-    font-size: 13px;
-    line-height: 20px;
-    color: var(--text-primary, #272d37);
-    background: var(--bg-base, #ffffff);
-    border: 1px solid var(--neutral-30, #bfc0c3);
-    border-radius: 6px;
-    outline: none;
-    cursor: pointer;
-    font-family: inherit;
+    flex: 1;
+    min-width: 0;
+  }
 
-    &:focus {
-      border-color: var(--text-info, #2a77ef);
-    }
+  &__date-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--text-secondary, #686c73);
+    flex-shrink: 0;
+  }
+
+  &__apply-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   &__cards {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  &__card {
-    flex: unset;
+    gap: 0.75rem;
   }
 
   &__section-title {
-    margin: 0 0 12px;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5rem;
     color: var(--text-primary, #272d37);
   }
 
+  // --- Бар-чарт ---
+
   &__chart-wrap {
     display: flex;
-    gap: 8px;
-    align-items: flex-start;
+    border: 0.0625rem solid var(--neutral-20, #d4d5d7);
+    border-radius: 0.5rem;
+    overflow: hidden;
   }
 
-  &__y-labels {
+  &__y-axis {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 160px;
+    height: 6.875rem;
+    width: 2.5rem;
     flex-shrink: 0;
+    border-right: 0.0625rem solid var(--neutral-20, #d4d5d7);
+    padding: 0 0.25rem;
+    background: var(--bg-base, #fff);
   }
 
   &__y-label {
-    font-size: 11px;
-    line-height: 16px;
-    color: var(--text-secondary, #686c73);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1rem;
+    color: var(--text-tertiary, #93969b);
     text-align: right;
-    min-width: 28px;
+    display: block;
   }
 
   &__chart-inner {
@@ -269,34 +290,39 @@ function progressPercent(value: number, total: number): number {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    background: var(--bg-base, #fff);
   }
 
   &__svg {
     width: 100%;
-    height: 160px;
+    height: 6.875rem;
     display: block;
-    overflow: visible;
+  }
+
+  &__grid-line {
+    stroke: var(--neutral-20, #d4d5d7);
+    stroke-width: 1;
   }
 
   &__bar {
-    fill: var(--text-info, #2a77ef);
-    opacity: 0.85;
+    fill: #c9e0ff;
 
     &:hover {
-      opacity: 1;
+      fill: #a8c8f0;
     }
   }
 
   &__x-labels {
     display: flex;
     justify-content: space-between;
-    overflow: hidden;
+    border-top: 0.0625rem solid var(--neutral-20, #d4d5d7);
+    padding: 0.125rem 0;
+    min-height: 1.25rem;
   }
 
   &__x-label {
-    font-size: 10px;
-    line-height: 14px;
+    font-size: 0.625rem;
+    line-height: 0.875rem;
     color: var(--text-secondary, #686c73);
     white-space: nowrap;
     overflow: hidden;
@@ -305,49 +331,58 @@ function progressPercent(value: number, total: number): number {
     text-align: center;
   }
 
-  &__summary-list {
+  // --- Общая статистика ---
+
+  &__summary-card {
+    background: var(--bg-base, #ffffff);
+    border: 0.0625rem solid var(--neutral-10, #eaeaeb);
+    border-radius: 0.5rem;
+    padding: 1.5rem 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1.25rem;
   }
 
   &__summary-row {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 0.25rem;
   }
 
   &__summary-header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    gap: 0.75rem;
   }
 
   &__summary-label {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 1rem;
+    line-height: 1.25rem;
     color: var(--text-primary, #272d37);
+    flex: 1;
+    min-width: 0;
   }
 
   &__summary-value {
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.25rem;
     color: var(--text-primary, #272d37);
-    font-family: 'Roboto Mono', monospace;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   &__progress-track {
     width: 100%;
-    height: 4px;
-    background: var(--neutral-20, #d4d5d7);
-    border-radius: 2px;
+    height: 0.25rem;
+    background: rgba(39, 45, 55, 0.1);
+    border-radius: 0.25rem;
     overflow: hidden;
   }
 
   &__progress-fill {
     height: 100%;
-    border-radius: 2px;
+    border-radius: 0.25rem;
     transition: width 0.3s ease;
   }
 }
