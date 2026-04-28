@@ -50,13 +50,17 @@ const saveLabel = computed<string>(() =>
   props.mode === 'add' ? 'Добавить' : 'Сохранить'
 )
 
+const isSaveDisabled = computed<boolean>(() =>
+  props.mode === 'add' && !isFormFilled.value
+)
+
 const isVisible = computed({
   get: () => props.isVisible,
   set: (val: boolean) => { if (!val) emit('close') },
 })
 
 function onSave(): void {
-  if (props.mode === 'add' && !isFormFilled.value) return
+  if (isSaveDisabled.value) return
   emit('save', { ...form.value })
 }
 </script>
@@ -65,36 +69,60 @@ function onSave(): void {
   <TirPmDrawer
     v-model:visible="isVisible"
     :position="TirPmDrawerPositionEnum.Right"
-    size="540px"
+    size="33.75rem"
     :is-active-animation="true"
   >
     <template #content>
       <div class="link-drawer">
         <!-- Шапка -->
         <div class="link-drawer__header">
-          <h2 class="link-drawer__title">{{ drawerTitle }}</h2>
-          <button
-            class="link-drawer__close"
-            type="button"
-            aria-label="Закрыть"
-            @click="emit('close')"
-          >
-            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="link-drawer__close-icon">
-              <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Вкладки (только edit) -->
-        <div v-if="mode === 'edit'" class="link-drawer__tabs">
-          <TirPmTabs v-model="activeTab">
-            <TirPmTab val="details" :current-tab="activeTab" label="Детали" />
-            <TirPmTab val="stats" :current-tab="activeTab" label="Статистика" />
-          </TirPmTabs>
+          <div class="link-drawer__header-content">
+            <h2 class="link-drawer__title">{{ drawerTitle }}</h2>
+            <button
+              class="link-drawer__close"
+              type="button"
+              :aria-label="'Закрыть'"
+              @click="emit('close')"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="link-drawer__close-icon"
+              >
+                <path
+                  d="M18 6L6 18M6 6L18 18"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Тело (скролл) -->
         <div class="link-drawer__body">
+          <!-- Вкладки (только edit) -->
+          <div
+            v-if="mode === 'edit'"
+            class="link-drawer__tabs"
+          >
+            <TirPmTabs v-model="activeTab">
+              <TirPmTab
+                val="details"
+                :current-tab="activeTab"
+                label="Детали"
+              />
+              <TirPmTab
+                val="stats"
+                :current-tab="activeTab"
+                label="Статистика"
+              />
+            </TirPmTabs>
+          </div>
+
+          <!-- Контент -->
           <MarketingLinkDetailsTab
             v-if="mode === 'add' || activeTab === 'details'"
             v-model="form"
@@ -108,9 +136,9 @@ function onSave(): void {
         <!-- Футер -->
         <div class="link-drawer__footer">
           <TirPmButton
-            :variant="TirPmButtonVariantEnum.PrimaryState"
+            :variant="isSaveDisabled ? TirPmButtonVariantEnum.TertiaryState : TirPmButtonVariantEnum.PrimaryState"
             :size="TirPmButtonSizeEnum.Middle"
-            :is-disabled="mode === 'add' && !isFormFilled"
+            :is-disabled="isSaveDisabled"
             class="link-drawer__save-btn"
             @click="onSave"
           >
@@ -139,36 +167,46 @@ function onSave(): void {
 
   // Шапка
   &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px;
     flex-shrink: 0;
-    border-bottom: 1px solid var(--neutral-20, #d4d5d7);
+    padding: 1.75rem 1.75rem 0;
+  }
+
+  &__header-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
   }
 
   &__title {
     margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 28px;
+    font-size: 1.625rem;
+    font-weight: 500;
+    line-height: 2rem;
     color: var(--text-primary, #272d37);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__close {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 3rem;
+    height: 3rem;
     background: none;
     border: none;
-    border-radius: 6px;
+    border-radius: 0.75rem;
     cursor: pointer;
     color: var(--text-secondary, #686c73);
-    padding: 0;
+    padding: 0.5rem;
     transition: background 0.12s, color 0.12s;
     flex-shrink: 0;
+    margin-top: -0.5rem;
+    margin-right: -0.75rem;
 
     &:hover {
       background: var(--neutral-10, #eaeaeb);
@@ -177,40 +215,43 @@ function onSave(): void {
   }
 
   &__close-icon {
-    width: 20px;
-    height: 20px;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
-  // Вкладки
+  // Вкладки (внутри body)
   &__tabs {
     flex-shrink: 0;
-    padding: 0 24px;
-    border-bottom: 1px solid var(--neutral-20, #d4d5d7);
+    border-bottom: 0.0625rem solid var(--neutral-30, #bfc0c3);
   }
 
-  // Скроллируемое тело
+  // Тело
   &__body {
     flex: 1;
     overflow-y: auto;
     min-height: 0;
+    padding: 1.75rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   // Футер
   &__footer {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px 24px;
-    border-top: 1px solid var(--neutral-20, #d4d5d7);
+    gap: 1rem;
+    padding: 1.5rem 2.5rem 2.5rem;
+    border-top: 0.0625rem solid var(--neutral-20, #d4d5d7);
     flex-shrink: 0;
   }
 
   &__save-btn {
-    min-width: 120px;
+    min-width: 6.5rem;
   }
 
   &__cancel-btn {
-    min-width: 90px;
+    min-width: 6.5rem;
   }
 }
 </style>

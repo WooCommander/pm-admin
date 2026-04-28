@@ -43,27 +43,24 @@ function statusIconType(status: MarketingLinkStatus): string {
 
 <template>
   <div class="details-tab">
-    <!-- Название кампании -->
     <TirPmInput
       :model-value="modelValue.campaignName"
-      label="Название кампании"
+      label="Название"
       :size="TirPmInputSizeEnum.Regular"
       :is-with-hint="false"
       class="details-tab__field"
       @update:model-value="patch({ campaignName: String($event) })"
     />
 
-    <!-- Слаг -->
     <TirPmInput
       :model-value="modelValue.slug"
-      label="Слаг"
+      label="Слаг ссылки"
       :size="TirPmInputSizeEnum.Regular"
       :is-with-hint="false"
       class="details-tab__field"
       @update:model-value="patch({ slug: String($event) })"
     />
 
-    <!-- Ссылка -->
     <TirPmInput
       :model-value="modelValue.url"
       label="Ссылка"
@@ -73,7 +70,8 @@ function statusIconType(status: MarketingLinkStatus): string {
       @update:model-value="patch({ url: String($event) })"
     />
 
-    <!-- Канал -->
+    <div class="details-tab__divider" />
+
     <TirPmSelect
       label="Канал"
       class="details-tab__field"
@@ -95,7 +93,6 @@ function statusIconType(status: MarketingLinkStatus): string {
       </template>
     </TirPmSelect>
 
-    <!-- UTM Source -->
     <TirPmInput
       :model-value="modelValue.utmSource"
       label="utm_source"
@@ -105,7 +102,6 @@ function statusIconType(status: MarketingLinkStatus): string {
       @update:model-value="patch({ utmSource: String($event) })"
     />
 
-    <!-- UTM Medium -->
     <TirPmInput
       :model-value="modelValue.utmMedium"
       label="utm_medium"
@@ -115,7 +111,6 @@ function statusIconType(status: MarketingLinkStatus): string {
       @update:model-value="patch({ utmMedium: String($event) })"
     />
 
-    <!-- UTM Campaign -->
     <TirPmInput
       :model-value="modelValue.utmCampaign"
       label="utm_campaign"
@@ -125,7 +120,6 @@ function statusIconType(status: MarketingLinkStatus): string {
       @update:model-value="patch({ utmCampaign: String($event) })"
     />
 
-    <!-- Статус -->
     <TirPmSelect
       label="Статус"
       class="details-tab__field"
@@ -156,28 +150,29 @@ function statusIconType(status: MarketingLinkStatus): string {
       </template>
     </TirPmSelect>
 
-    <!-- Переключатели -->
-    <div class="details-tab__toggles">
-      <!-- Отслеживать регистрации -->
-      <div class="details-tab__toggle-row">
-        <div class="details-tab__toggle-info">
-          <span class="details-tab__toggle-label">Отслеживать регистрации</span>
-        </div>
-        <TirToggle
-          :model-value="modelValue.trackRegistrations"
-          @update:model-value="patch({ trackRegistrations: $event })"
-        />
-      </div>
+    <div class="details-tab__divider" />
 
-      <!-- Отслеживать звонки -->
-      <div class="details-tab__toggle-row">
-        <div class="details-tab__toggle-info">
-          <span class="details-tab__toggle-label">Отслеживать звонки</span>
-        </div>
-        <TirToggle
-          :model-value="modelValue.trackCalls"
-          @update:model-value="patch({ trackCalls: $event })"
-        />
+    <div class="details-tab__switch-row">
+      <TirToggle
+        :model-value="modelValue.trackRegistrations"
+        class="details-tab__switch-toggle"
+        @update:model-value="patch({ trackRegistrations: Boolean($event) })"
+      />
+      <div class="details-tab__switch-content">
+        <span class="details-tab__switch-label">Отслеживать регистрации</span>
+        <span class="details-tab__switch-hint">Считать новые аккаунты с этой ссылки</span>
+      </div>
+    </div>
+
+    <div class="details-tab__switch-row">
+      <TirToggle
+        :model-value="modelValue.trackCalls"
+        class="details-tab__switch-toggle"
+        @update:model-value="patch({ trackCalls: Boolean($event) })"
+      />
+      <div class="details-tab__switch-content">
+        <span class="details-tab__switch-label">Отслеживать звонки</span>
+        <span class="details-tab__switch-hint">Фиксировать заявки «оставить звонок»</span>
       </div>
     </div>
   </div>
@@ -187,73 +182,74 @@ function statusIconType(status: MarketingLinkStatus): string {
 .details-tab {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 24px;
+  gap: 1.5rem;
 
   &__field {
     width: 100%;
   }
 
+  &__divider {
+    height: 0.0625rem;
+    background: var(--neutral-30, #bfc0c3);
+    flex-shrink: 0;
+  }
+
   &__select-value {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--text-primary, #272d37);
   }
 
   &__status-value {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 0.375rem;
   }
 
   &__status-label {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--text-primary, #272d37);
   }
 
   &__status-option {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    line-height: 20px;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--text-primary, #272d37);
   }
 
-  &__toggles {
+  &__switch-row {
     display: flex;
-    flex-direction: column;
-    gap: 0;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid var(--neutral-20, #d4d5d7);
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 
-  &__toggle-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    background: var(--bg-base, #ffffff);
-
-    & + & {
-      border-top: 1px solid var(--neutral-20, #d4d5d7);
-    }
+  &__switch-toggle {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
   }
 
-  &__toggle-info {
+  &__switch-content {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 0.25rem;
+    flex: 1;
     min-width: 0;
   }
 
-  &__toggle-label {
-    font-size: 14px;
-    line-height: 20px;
+  &__switch-label {
+    font-size: 1rem;
+    line-height: 1.5rem;
     color: var(--text-primary, #272d37);
-    font-weight: 500;
+  }
+
+  &__switch-hint {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--text-secondary, #686c73);
   }
 }
 </style>

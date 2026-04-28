@@ -147,28 +147,28 @@ function onApply(): void {
 <style lang="scss" scoped>
 .overlay {
   background: var(--bg-base, #fff);
-  padding: 28px 28px 24px;
+  padding: 1.75rem 1.75rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
 
   // Вкладки
   &__tabs {
     display: flex;
     gap: 0;
-    border-bottom: 1px solid var(--neutral-30, #bfc0c3);
+    border-bottom: 0.0625rem solid var(--neutral-30, #bfc0c3);
   }
 
   &__tab {
     position: relative;
-    padding: 0 4px 8px;
-    margin-right: 24px;
+    padding: 0 0.25rem 0.5rem;
+    margin-right: 1.5rem;
     background: none;
     border: none;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 1rem;
+    line-height: 1.5rem;
     color: var(--text-secondary, #686c73);
     font-weight: 400;
     transition: color 0.15s;
@@ -179,27 +179,27 @@ function onApply(): void {
     }
 
     &:focus-visible {
-      outline: 2px solid var(--text-info, #2a77ef);
-      outline-offset: 2px;
-      border-radius: 2px;
+      outline: 0.125rem solid var(--text-info, #2a77ef);
+      outline-offset: 0.125rem;
+      border-radius: 0.125rem;
     }
   }
 
   &__tab-underline {
     position: absolute;
-    bottom: -1px;
+    bottom: -0.0625rem;
     left: 0;
     right: 0;
-    height: 3px;
+    height: 0.1875rem;
     background: var(--text-info, #2a77ef);
-    border-radius: 2px 2px 0 0;
+    border-radius: 0.125rem 0.125rem 0 0;
   }
 
   // Строка с датами
   &__controls {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 0.75rem;
   }
 
   &__date-wrap {
@@ -213,14 +213,14 @@ function onApply(): void {
   }
 
   &__date-icon {
-    width: 20px;
-    height: 20px;
+    width: 1.25rem;
+    height: 1.25rem;
     color: var(--text-secondary, #686c73);
   }
 
   &__picker-popup {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 0.25rem);
     left: 0;
     z-index: 100;
   }

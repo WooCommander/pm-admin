@@ -175,58 +175,58 @@ function pasteToFrom(): void {
 
 <style lang="scss" scoped>
 .date-picker {
-  width: 543px;
+  width: 33.9375rem;
   background: var(--bg-base, #fff);
-  border: 1px solid var(--neutral-10, #eaeaeb);
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.04);
+  border: 0.0625rem solid var(--neutral-10, #eaeaeb);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.04), 0 0 0.0625rem rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 
   &__header {
-    border-bottom: 1px solid var(--neutral-10, #eaeaeb);
-    padding: 8px 12px;
+    border-bottom: 0.0625rem solid var(--neutral-10, #eaeaeb);
+    padding: 0.5rem 0.75rem;
   }
 
   &__header-label {
     font-family: 'Roboto', sans-serif;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 500;
-    line-height: 16px;
+    line-height: 1rem;
     color: var(--text-secondary, #686c73);
   }
 
   &__body {
     display: flex;
-    height: 200px;
+    height: 12.5rem;
   }
 
   // Левая панель
   &__left {
     flex: 1;
-    border-right: 1px solid var(--neutral-10, #eaeaeb);
+    border-right: 0.0625rem solid var(--neutral-10, #eaeaeb);
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
   &__section-header {
-    border-bottom: 1px solid var(--neutral-10, #eaeaeb);
-    padding: 8px 12px;
+    border-bottom: 0.0625rem solid var(--neutral-10, #eaeaeb);
+    padding: 0.5rem 0.75rem;
     font-family: 'Roboto', sans-serif;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
-    line-height: 16px;
+    line-height: 1rem;
     color: var(--text-primary, #272d37);
     flex-shrink: 0;
   }
 
   &__fields {
-    padding: 8px 12px;
+    padding: 0.5rem 0.75rem;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0.5rem;
     flex: 1;
     overflow: hidden;
   }
@@ -234,14 +234,14 @@ function pasteToFrom(): void {
   &__field-group {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 0.25rem;
   }
 
   &__field-label {
     font-family: 'Roboto', sans-serif;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 500;
-    line-height: 16px;
+    line-height: 1rem;
     color: var(--text-primary, #272d37);
   }
 
@@ -250,27 +250,27 @@ function pasteToFrom(): void {
   }
 
   &__input-icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     color: var(--text-secondary, #686c73);
   }
 
   &__actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
   }
 
   &__icon-btn {
-    width: 24px;
-    height: 24px;
-    padding: 4px;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.25rem;
     flex-shrink: 0;
   }
 
   &__btn-icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
   }
 
   &__apply-btn {
@@ -279,7 +279,7 @@ function pasteToFrom(): void {
 
   // Правая панель
   &__right {
-    width: 217px;
+    width: 13.5625rem;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -288,8 +288,8 @@ function pasteToFrom(): void {
   }
 
   &__search-wrap {
-    border-bottom: 1px solid var(--neutral-10, #eaeaeb);
-    padding: 8px 12px;
+    border-bottom: 0.0625rem solid var(--neutral-10, #eaeaeb);
+    padding: 0.5rem 0.75rem;
     flex-shrink: 0;
   }
 
@@ -306,14 +306,14 @@ function pasteToFrom(): void {
 
   &__preset-item {
     border: none;
-    border-bottom: 1px solid var(--neutral-10, #eaeaeb);
+    border-bottom: 0.0625rem solid var(--neutral-10, #eaeaeb);
     background: var(--bg-base, #fff);
-    padding: 8px 12px;
+    padding: 0.5rem 0.75rem;
     text-align: left;
     font-family: 'Roboto', sans-serif;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 400;
-    line-height: 16px;
+    line-height: 1rem;
     color: var(--text-primary, #272d37);
     cursor: pointer;
     transition: background 0.1s;
