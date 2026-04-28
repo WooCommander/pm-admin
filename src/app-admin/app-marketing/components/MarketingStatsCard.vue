@@ -94,27 +94,27 @@ defineProps<Props>()
 .stats-card {
   flex: 1 1 0;
   min-width: 0;
-  padding: 16px;
+  padding: 1rem;
   background: var(--bg-secondary, #f8f6f9);
-  border-radius: 12px;
+  border-radius: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
   overflow: hidden;
 
   &__label {
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 500;
-    line-height: 24px;
+    line-height: 1.5rem;
     color: var(--text-secondary, #686c73);
   }
 
   &__trend {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 0.25rem;
 
     &--positive { color: var(--text-positive, #0d9336); }
     &--negative { color: var(--text-negative, #ec2e14); }
@@ -122,24 +122,24 @@ defineProps<Props>()
   }
 
   &__trend-icon {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     flex-shrink: 0;
   }
 
   &__trend-text {
     font-family: 'Roboto', sans-serif;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 500;
-    line-height: 20px;
+    line-height: 1.25rem;
   }
 
   &__value {
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    font-size: 30px;
+    font-size: 1.875rem;
     font-weight: 600;
-    line-height: 36px;
+    line-height: 2.25rem;
     color: var(--text-primary, #272d37);
   }
 }
