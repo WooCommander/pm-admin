@@ -16,7 +16,6 @@ import type {
   EmployeeFormModel,
   EmployeeRoleOption,
   EmployeeStatus,
-  EmployeeStatusOption,
 } from '../models'
 import {
   EMPLOYEE_ROLE_OPTIONS,
@@ -222,7 +221,7 @@ const avatarButtonIcon = computed(() => (props.modelValue.avatarUrl ? ArrowPathI
           <button
             type="button"
             class="employee-form-fields__option"
-            @click="updateForm({ status: option.value as EmployeeStatusOption['value'] })"
+            @click="updateForm({ status: option.value as EmployeeStatus })"
           >
             <EmployeeStatusBadge :status="option.value as EmployeeStatus" />
           </button>

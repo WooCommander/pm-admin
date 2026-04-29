@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
+import { appEmployeesService } from '../AppEmployeesService'
 import {
+  EmployeeConfirmDialog,
   EmployeeProfileDrawer,
   EmployeesCreateDrawer,
   EmployeesTable,
@@ -15,9 +17,9 @@ import {
   type EmployeeListItemModel,
   EMPLOYEES_PAGE_SIZE_OPTIONS,
   type EmployeesFiltersModel,
+  getEmployeeFullName,
   isEmployeeFormValid,
 } from '../models'
-import { employeesMockService } from '../services'
 
 const filters = ref<EmployeesFiltersModel>({ ...DEFAULT_EMPLOYEES_FILTERS })
 const currentPage = ref(1)
@@ -27,8 +29,53 @@ const isProfileDrawerVisible = ref(false)
 const createForm = ref<EmployeeFormModel>(createDefaultEmployeeForm())
 const editForm = ref<EmployeeFormModel>(createDefaultEmployeeForm())
 const selectedEmployeeId = ref<string | null>(null)
+const isDeleteDialogVisible = ref(false)
 
-const filteredEmployees = computed(() => employeesMockService.getEmployees(filters.value))
+const selectedEmployee = computed(() =>
+  appEmployeesService.state.employees.find((employee) => employee.id === selectedEmployeeId.value) ?? null,
+)
+
+const teamMembers = computed(() => {
+  if (!selectedEmployee.value) return []
+
+  return selectedEmployee.value.teamMemberIds
+    .map((teamMemberId) =>
+      appEmployeesService.state.employees.find((employee) => employee.id === teamMemberId),
+    )
+    .filter((employee): employee is EmployeeListItemModel => Boolean(employee))
+})
+
+const availableTeamMembers = computed(() => {
+  if (!selectedEmployee.value) return []
+
+  const busyIds = new Set(selectedEmployee.value.teamMemberIds)
+
+  return appEmployeesService.state.employees.filter((employee) => {
+    if (employee.id === selectedEmployee.value?.id) return false
+    return !busyIds.has(employee.id)
+  })
+})
+
+const filteredEmployees = computed(() => {
+  const normalizedSearch = filters.value.search.trim().toLowerCase()
+  const items = appEmployeesService.state.employees.filter((employee) => {
+    const matchesStatus =
+      filters.value.status === 'all' || employee.status === filters.value.status
+    const matchesRole =
+      filters.value.role === 'all' || employee.role === filters.value.role
+    const matchesSearch =
+      normalizedSearch.length === 0 ||
+      getEmployeeFullName(employee).toLowerCase().includes(normalizedSearch) ||
+      employee.email.toLowerCase().includes(normalizedSearch)
+
+    return matchesStatus && matchesRole && matchesSearch
+  })
+
+  return {
+    items,
+    total: items.length,
+  }
+})
 
 const totalPages = computed(() =>
   Math.max(1, Math.ceil(filteredEmployees.value.total / pageSize.value)),
@@ -84,6 +131,7 @@ const openEdit = (employee: EmployeeListItemModel) => {
 
 const closeEdit = () => {
   isProfileDrawerVisible.value = false
+  isDeleteDialogVisible.value = false
   selectedEmployeeId.value = null
 }
 
@@ -96,21 +144,61 @@ const updateProfileDrawerVisibility = (value: boolean) => {
   isProfileDrawerVisible.value = value
 }
 
-const submitCreate = () => {
+const submitCreate = async () => {
   if (!isEmployeeFormValid(createForm.value)) return
 
-  employeesMockService.createEmployee(createForm.value)
+  await appEmployeesService.createEmployee(createForm.value)
   closeCreate()
   resetCreateForm()
   currentPage.value = 1
 }
 
-const submitEdit = () => {
+const submitEdit = async () => {
   if (!selectedEmployeeId.value || !isEmployeeFormValid(editForm.value)) return
 
-  employeesMockService.updateEmployee(selectedEmployeeId.value, editForm.value)
+  const isUpdated = await appEmployeesService.updateEmployee(
+    selectedEmployeeId.value,
+    editForm.value,
+  )
+
+  if (!isUpdated) return
+
   closeEdit()
 }
+
+const submitDelete = async () => {
+  if (!selectedEmployeeId.value) return
+
+  const isDeleted = await appEmployeesService.deleteEmployee(selectedEmployeeId.value)
+  if (!isDeleted) return
+
+  isDeleteDialogVisible.value = false
+  closeEdit()
+  currentPage.value = Math.min(currentPage.value, totalPages.value)
+}
+
+const requestDeleteEmployee = () => {
+  if (!selectedEmployeeId.value) return
+  isDeleteDialogVisible.value = true
+}
+
+const cancelDeleteEmployee = () => {
+  isDeleteDialogVisible.value = false
+}
+
+const addTeamMember = async (teamMemberId: string) => {
+  if (!selectedEmployeeId.value) return
+  await appEmployeesService.addTeamMember(selectedEmployeeId.value, teamMemberId)
+}
+
+const removeTeamMember = async (teamMemberId: string) => {
+  if (!selectedEmployeeId.value) return
+  await appEmployeesService.removeTeamMember(selectedEmployeeId.value, teamMemberId)
+}
+
+onMounted(() => {
+  void appEmployeesService.loadEmployees()
+})
 </script>
 
 <template>
@@ -146,11 +234,27 @@ const submitEdit = () => {
       <EmployeeProfileDrawer
         :visible="isProfileDrawerVisible"
         :form="editForm"
+        :team-members="teamMembers"
+        :available-team-members="availableTeamMembers"
         :is-submit-disabled="isEditSubmitDisabled"
+        :is-delete-disabled="!selectedEmployeeId"
         @update:visible="updateProfileDrawerVisibility"
         @update:form="editForm = $event"
         @submit="submitEdit"
+        @delete="requestDeleteEmployee"
+        @add-team-member="addTeamMember"
+        @remove-team-member="removeTeamMember"
         @cancel="closeEdit"
+      />
+
+      <EmployeeConfirmDialog
+        :is-visible="isDeleteDialogVisible"
+        title="Удалить сотрудника?"
+        :description="selectedEmployee ? `${getEmployeeFullName(selectedEmployee)} будет удален из списка сотрудников.` : ''"
+        confirm-label="Удалить"
+        cancel-label="Отмена"
+        @confirm="submitDelete"
+        @cancel="cancelDeleteEmployee"
       />
     </div>
   </section>

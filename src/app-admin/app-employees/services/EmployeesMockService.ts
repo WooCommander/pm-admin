@@ -1,13 +1,9 @@
 import type {
   EmployeeFormModel,
   EmployeeListItemModel,
-  EmployeesFiltersModel,
-  EmployeesListResultModel,
   EmployeeStatus,
 } from '../models'
-import {
-  getEmployeeFullName,
-} from '../models'
+import type { EmployeesDataSource } from './employees.types'
 
 const EMPLOYEE_COLORS = [
   'avatar-blue-pale',
@@ -69,7 +65,7 @@ const STATUS_SEQUENCE: EmployeeStatus[] = [
   'dismissed',
 ]
 
-const MOCK_EMPLOYEES: EmployeeListItemModel[] = EMPLOYEE_NAMES.map((name, index) => {
+const createMockEmployees = (): EmployeeListItemModel[] => EMPLOYEE_NAMES.map((name, index) => {
   const [firstName, lastName, middleName] = name
   const role = ROLE_SEQUENCE[index % ROLE_SEQUENCE.length]
   const status = STATUS_SEQUENCE[index % STATUS_SEQUENCE.length]
@@ -84,60 +80,75 @@ const MOCK_EMPLOYEES: EmployeeListItemModel[] = EMPLOYEE_NAMES.map((name, index)
     role,
     status,
     avatarColor: EMPLOYEE_COLORS[index % EMPLOYEE_COLORS.length],
+    teamMemberIds: [],
   }
 })
 
-export class EmployeesMockService {
-  getEmployees(filters: EmployeesFiltersModel): EmployeesListResultModel {
-    const normalizedSearch = filters.search.trim().toLowerCase()
+const cloneEmployee = (employee: EmployeeListItemModel): EmployeeListItemModel => ({
+  ...employee,
+  teamMemberIds: [...employee.teamMemberIds],
+})
 
-    const items = MOCK_EMPLOYEES.filter((employee) => {
-      const matchesStatus =
-        filters.status === 'all' || employee.status === filters.status
+export class EmployeesMockService implements EmployeesDataSource {
+  private employees: EmployeeListItemModel[] = createMockEmployees()
 
-      const matchesRole =
-        filters.role === 'all' || employee.role === filters.role
-
-      const matchesSearch =
-        normalizedSearch.length === 0 ||
-        getEmployeeFullName(employee).toLowerCase().includes(normalizedSearch) ||
-        employee.email.toLowerCase().includes(normalizedSearch)
-
-      return matchesStatus && matchesRole && matchesSearch
-    })
-
-    return {
-      items,
-      total: items.length,
-    }
+  constructor() {
+    this.seedTeams()
   }
 
-  createEmployee(form: EmployeeFormModel): EmployeeListItemModel {
+  private seedTeams(): void {
+    this.assignTeamMembers('employee-1', ['employee-2', 'employee-3', 'employee-4'])
+    this.assignTeamMembers('employee-6', ['employee-7', 'employee-8'])
+  }
+
+  private assignTeamMembers(employeeId: string, teamMemberIds: string[]): void {
+    const employee = this.employees.find((item) => item.id === employeeId)
+    if (!employee) return
+
+    employee.teamMemberIds = teamMemberIds.filter(
+      (teamMemberId, index, items) =>
+        teamMemberId !== employeeId &&
+        items.indexOf(teamMemberId) === index &&
+        this.employees.some((candidate) => candidate.id === teamMemberId),
+    )
+  }
+
+  async listEmployees(): Promise<EmployeeListItemModel[]> {
+    return this.employees.map(cloneEmployee)
+  }
+
+  async createEmployee(form: EmployeeFormModel): Promise<EmployeeListItemModel> {
     const employee: EmployeeListItemModel = {
-      id: `employee-${MOCK_EMPLOYEES.length + 1}`,
+      id: `employee-${this.employees.length + 1}`,
       firstName: form.firstName.trim(),
       lastName: form.lastName.trim(),
       middleName: form.middleName.trim(),
       email: form.email.trim(),
       role: form.role,
       status: form.status,
-      avatarColor: EMPLOYEE_COLORS[MOCK_EMPLOYEES.length % EMPLOYEE_COLORS.length],
+      avatarColor: EMPLOYEE_COLORS[this.employees.length % EMPLOYEE_COLORS.length],
       avatarUrl: form.avatarUrl?.trim() || undefined,
+      teamMemberIds: [],
     }
 
-    MOCK_EMPLOYEES.unshift(employee)
+    this.employees.unshift(employee)
 
-    return employee
+    return cloneEmployee(employee)
   }
 
-  getEmployeeById(employeeId: string): EmployeeListItemModel | undefined {
-    return MOCK_EMPLOYEES.find((employee) => employee.id === employeeId)
+  async getEmployeeById(employeeId: string): Promise<EmployeeListItemModel | null> {
+    const employee = this.employees.find((item) => item.id === employeeId)
+
+    return employee ? cloneEmployee(employee) : null
   }
 
-  updateEmployee(employeeId: string, form: EmployeeFormModel): EmployeeListItemModel | undefined {
-    const employee = this.getEmployeeById(employeeId)
+  async updateEmployee(
+    employeeId: string,
+    form: EmployeeFormModel,
+  ): Promise<EmployeeListItemModel | null> {
+    const employee = this.employees.find((item) => item.id === employeeId)
 
-    if (!employee) return undefined
+    if (!employee) return null
 
     employee.firstName = form.firstName.trim()
     employee.lastName = form.lastName.trim()
@@ -147,7 +158,48 @@ export class EmployeesMockService {
     employee.status = form.status
     employee.avatarUrl = form.avatarUrl?.trim() || undefined
 
-    return employee
+    return cloneEmployee(employee)
+  }
+
+  async addTeamMember(
+    employeeId: string,
+    teamMemberId: string,
+  ): Promise<EmployeeListItemModel | null> {
+    const employee = this.employees.find((item) => item.id === employeeId)
+    if (!employee || employeeId === teamMemberId) return null
+
+    const teamMemberExists = this.employees.some((item) => item.id === teamMemberId)
+    if (!teamMemberExists) return null
+
+    if (!employee.teamMemberIds.includes(teamMemberId)) {
+      employee.teamMemberIds = [...employee.teamMemberIds, teamMemberId]
+    }
+
+    return cloneEmployee(employee)
+  }
+
+  async removeTeamMember(
+    employeeId: string,
+    teamMemberId: string,
+  ): Promise<EmployeeListItemModel | null> {
+    const employee = this.employees.find((item) => item.id === employeeId)
+    if (!employee) return null
+
+    employee.teamMemberIds = employee.teamMemberIds.filter((item) => item !== teamMemberId)
+    return cloneEmployee(employee)
+  }
+
+  async deleteEmployee(employeeId: string): Promise<boolean> {
+    const nextEmployees = this.employees.filter((employee) => employee.id !== employeeId)
+
+    if (nextEmployees.length === this.employees.length) return false
+
+    this.employees = nextEmployees.map((employee) => ({
+      ...employee,
+      teamMemberIds: employee.teamMemberIds.filter((teamMemberId) => teamMemberId !== employeeId),
+    }))
+
+    return true
   }
 }
 

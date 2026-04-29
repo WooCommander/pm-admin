@@ -84,7 +84,11 @@ const copyEmail = async (email: string) => {
             </TirPmTableTd>
 
             <TirPmTableTd>
-              <button type="button" class="employees-table__name-button">
+              <button
+                type="button"
+                class="employees-table__name-button"
+                @click="emit('edit', employee)"
+              >
                 {{ getEmployeeFullName(employee) }}
               </button>
             </TirPmTableTd>
@@ -101,6 +105,7 @@ const copyEmail = async (email: string) => {
               <button
                 type="button"
                 class="employees-table__copy-button"
+                @dblclick.stop
                 @click="copyEmail(employee.email)"
               >
                 <ClipboardDocumentIcon class="employees-table__copy-icon" />

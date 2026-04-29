@@ -20,6 +20,7 @@ export interface EmployeeListItemModel {
   status: EmployeeStatus
   avatarColor: string
   avatarUrl?: string
+  teamMemberIds: string[]
 }
 
 export interface EmployeeFormModel {
@@ -64,7 +65,7 @@ export const EMPLOYEES_PAGE_SIZE_OPTIONS = [10, 19, 25, 50]
 export const DEFAULT_EMPLOYEES_FILTERS: EmployeesFiltersModel = {
   search: '',
   role: 'all',
-  status: 'active',
+  status: 'all',
 }
 
 export const getEmployeeFullName = (employee: EmployeeListItemModel): string =>

@@ -1,37 +1,44 @@
 <script setup lang="ts">
-import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button';
-import { TirPmDrawer, TirPmDrawerPositionEnum } from 'tir-pm-drawer';
-import { TirPmTab, TirPmTabs, TirPmTabsVariantEnum } from 'tir-pm-tabs';
-import { XMarkIcon } from 'tir-style-system/icons/outline';
-import { ref, watch } from 'vue';
+import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button'
+import { TirPmDrawer, TirPmDrawerPositionEnum } from 'tir-pm-drawer'
+import { TirPmTab, TirPmTabs, TirPmTabsVariantEnum } from 'tir-pm-tabs'
+import { XMarkIcon } from 'tir-style-system/icons/outline'
+import { ref, watch } from 'vue'
 
-import type { EmployeeFormModel } from '../models';
-import EmployeeAccessTab from './EmployeeAccessTab.vue';
-import EmployeeFormFields from './EmployeeFormFields.vue';
+import type { EmployeeFormModel, EmployeeListItemModel } from '../models'
+import EmployeeAccessTab from './EmployeeAccessTab.vue'
+import EmployeeFormFields from './EmployeeFormFields.vue'
+import EmployeeTeamTab from './EmployeeTeamTab.vue'
 
 const props = defineProps<{
-  visible: boolean;
-  form: EmployeeFormModel;
-  isSubmitDisabled: boolean;
-}>();
+  visible: boolean
+  form: EmployeeFormModel
+  teamMembers: EmployeeListItemModel[]
+  availableTeamMembers: EmployeeListItemModel[]
+  isSubmitDisabled: boolean
+  isDeleteDisabled?: boolean
+}>()
 
 const emit = defineEmits<{
-  (e: 'update:visible', value: boolean): void;
-  (e: 'update:form', value: EmployeeFormModel): void;
-  (e: 'submit'): void;
-  (e: 'cancel'): void;
-}>();
+  (e: 'update:visible', value: boolean): void
+  (e: 'update:form', value: EmployeeFormModel): void
+  (e: 'submit'): void
+  (e: 'delete'): void
+  (e: 'add-team-member', employeeId: string): void
+  (e: 'remove-team-member', employeeId: string): void
+  (e: 'cancel'): void
+}>()
 
-type EmployeeProfileTab = 'details' | 'team' | 'access';
+type EmployeeProfileTab = 'details' | 'team' | 'access'
 
-const activeTab = ref<EmployeeProfileTab>('details');
+const activeTab = ref<EmployeeProfileTab>('details')
 
 watch(
   () => props.visible,
   (visible) => {
-    if (visible) activeTab.value = 'details';
+    if (visible) activeTab.value = 'details'
   },
-);
+)
 </script>
 
 <template>
@@ -78,15 +85,14 @@ watch(
             @update:model-value="emit('update:form', $event)"
           />
 
-          <div v-else class="employee-profile-drawer__placeholder">
-            <div class="employee-profile-drawer__placeholder-card">
-              <p class="employee-profile-drawer__placeholder-title">Управление командой</p>
-              <p class="employee-profile-drawer__placeholder-text">
-                Этот блок вынесен в следующий этап, чтобы не смешивать детали профиля с командной
-                логикой.
-              </p>
-            </div>
-          </div>
+          <EmployeeTeamTab
+            v-else
+            :team-members="teamMembers"
+            :available-team-members="availableTeamMembers"
+            class="employee-profile-drawer__tab-content"
+            @add="emit('add-team-member', $event)"
+            @remove="emit('remove-team-member', $event)"
+          />
         </div>
 
         <footer v-if="activeTab === 'details'" class="employee-profile-drawer__footer">
@@ -97,6 +103,15 @@ watch(
             @click="emit('submit')"
           >
             Сохранить
+          </TirPmButton>
+
+          <TirPmButton
+            :variant="TirPmButtonVariantEnum.SecondaryState"
+            :size="TirPmButtonSizeEnum.Regular"
+            :is-disabled="isDeleteDisabled"
+            @click="emit('delete')"
+          >
+            Удалить
           </TirPmButton>
 
           <TirPmButton
@@ -155,7 +170,10 @@ watch(
   }
 
   &__body {
-    overflow: auto;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    min-height: 0;
+    overflow: hidden;
     padding: 1.75rem;
   }
 
@@ -163,33 +181,9 @@ watch(
     margin-bottom: 1.5rem;
   }
 
-  &__placeholder {
-    display: flex;
-    min-height: 20rem;
-    align-items: flex-start;
-  }
-
-  &__placeholder-card {
-    width: 100%;
-    padding: 1.125rem 1.25rem;
-    border: 0.0625rem solid #eceef2;
-    border-radius: 0.75rem;
-    background: #f8f9fc;
-  }
-
-  &__placeholder-title {
-    margin: 0 0 0.5rem;
-    color: #232931;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.25rem;
-  }
-
-  &__placeholder-text {
-    margin: 0;
-    color: #6f747d;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+  &__tab-content {
+    min-height: 0;
+    overflow: auto;
   }
 
   &__footer {
