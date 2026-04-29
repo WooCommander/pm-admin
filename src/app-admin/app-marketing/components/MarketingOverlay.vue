@@ -79,7 +79,7 @@ function onApply(): void {
           @update:model-value="emit('update:filters', { dateFrom: String($event) || null })"
           @click.stop="togglePicker('from')"
         >
-          <template #leftInputAddons>
+          <template #rightInputAddons>
             <CalendarDaysIcon class="overlay__date-icon" />
           </template>
         </TirPmInput>
@@ -111,7 +111,7 @@ function onApply(): void {
           @update:model-value="emit('update:filters', { dateTo: String($event) || null })"
           @click.stop="togglePicker('to')"
         >
-          <template #leftInputAddons>
+          <template #rightInputAddons>
             <CalendarDaysIcon class="overlay__date-icon" />
           </template>
         </TirPmInput>

@@ -1,9 +1,9 @@
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { VueLoaderPlugin } from 'vue-loader';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
 import webpack from 'webpack';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -107,10 +107,7 @@ export default {
       },
       {
         test: /\.css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader',
-        ],
+        use: ['vue-style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -130,9 +127,9 @@ export default {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { 
-          from: 'public', 
-          to: '.', 
+        {
+          from: 'public',
+          to: '.',
           globOptions: {
             ignore: ['**/index.html'],
           },
@@ -159,7 +156,7 @@ export default {
   ],
   devServer: {
     host: '0.0.0.0',
-    port: 5179,
+    port: 5180,
     allowedHosts: 'all',
     historyApiFallback: true,
     hot: true,

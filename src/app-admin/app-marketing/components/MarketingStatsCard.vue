@@ -114,7 +114,7 @@ defineProps<Props>()
   &__trend {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.75rem;
 
     &--positive { color: var(--text-positive, #0d9336); }
     &--negative { color: var(--text-negative, #ec2e14); }

@@ -156,6 +156,12 @@ const pagedLinks = () => {
   &__grid {
     width: 100%;
     min-width: 68.75rem;
+    --tir-pm-table-container__padding: 0;
+    --tir-pm-table-grid__gap: 0;
+    --tir-pm-table-grid-header__padding: 0;
+    --tir-pm-table-grid-tr__padding: 0;
+    --tir-pm-table-grid-th__padding: 0.5rem 0.875rem;
+    --tir-pm-table-grid-td__padding: 0.625rem 0.875rem;
   }
 
   // Название кампании
