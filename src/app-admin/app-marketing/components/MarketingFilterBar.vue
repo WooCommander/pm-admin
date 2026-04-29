@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button'
-import { TirPmInput, TirPmInputSizeEnum } from 'tir-pm-input'
-import { MagnifyingGlassIcon, PlusIcon } from 'tir-style-system/icons/outline'
+import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button';
+import { TirPmInput, TirPmInputSizeEnum } from 'tir-pm-input';
+import { MagnifyingGlassIcon, PlusIcon } from 'tir-style-system/icons/outline';
 
-import type { MarketingFiltersModel, MarketingStatusTab } from '../models'
+import type { MarketingFiltersModel, MarketingStatusTab } from '../models';
 
 interface Props {
-  filters: MarketingFiltersModel
+  filters: MarketingFiltersModel;
 }
 
 interface Emits {
-  (e: 'update:filters', patch: Partial<MarketingFiltersModel>): void
-  (e: 'add'): void
+  (e: 'update:filters', patch: Partial<MarketingFiltersModel>): void;
+  (e: 'add'): void;
 }
 
-const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
+const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
 
 const STATUS_TABS: { key: MarketingStatusTab; label: string }[] = [
   { key: 'all', label: 'Все' },
   { key: 'active', label: 'Активные' },
   { key: 'paused', label: 'На паузе' },
-]
+];
 
 function selectStatus(key: MarketingStatusTab): void {
-  emit('update:filters', { statusTab: key })
+  emit('update:filters', { statusTab: key });
 }
 </script>
 
@@ -42,10 +42,7 @@ function selectStatus(key: MarketingStatusTab): void {
           @click="selectStatus(tab.key)"
         >
           {{ tab.label }}
-          <span
-            v-if="props.filters.statusTab === tab.key"
-            class="filter-bar__tab-underline"
-          />
+          <span v-if="props.filters.statusTab === tab.key" class="filter-bar__tab-underline" />
         </button>
       </div>
 
@@ -73,7 +70,9 @@ function selectStatus(key: MarketingStatusTab): void {
       aria-label="Добавить"
       @click="emit('add')"
     >
-      <PlusIcon class="filter-bar__add-icon" />
+      <template #leftSlot>
+        <PlusIcon />
+      </template>
     </TirPmButton>
   </div>
 </template>

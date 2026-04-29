@@ -2,6 +2,7 @@
 import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button';
 import { TirPmDrawer, TirPmDrawerPositionEnum } from 'tir-pm-drawer';
 import { TirPmTab, TirPmTabs } from 'tir-pm-tabs';
+import { XMarkIcon } from 'tir-style-system/icons/outline';
 import { computed, ref, watch } from 'vue';
 
 import type {
@@ -92,26 +93,15 @@ function onSave(): void {
         <div class="link-drawer__header">
           <div class="link-drawer__header-content">
             <h2 class="link-drawer__title">{{ drawerTitle }}</h2>
-            <button
-              class="link-drawer__close"
-              type="button"
-              :aria-label="'Закрыть'"
+            <TirPmButton
+              :variant="TirPmButtonVariantEnum.LinkState"
+              :size="TirPmButtonSizeEnum.Middle"
               @click="emit('close')"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                class="link-drawer__close-icon"
-              >
-                <path
-                  d="M18 6L6 18M6 6L18 18"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </button>
+              <template #leftSlot>
+                <XMarkIcon />
+              </template>
+            </TirPmButton>
           </div>
         </div>
 
