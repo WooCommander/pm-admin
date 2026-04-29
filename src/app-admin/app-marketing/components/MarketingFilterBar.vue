@@ -92,6 +92,7 @@ function selectStatus(key: MarketingStatusTab): void {
     gap: 1.5rem;
     flex: 1;
     min-width: 0;
+    flex-wrap: wrap;
   }
 
   // Вкладки статуса
@@ -99,7 +100,6 @@ function selectStatus(key: MarketingStatusTab): void {
     display: flex;
     align-items: center;
     gap: 0;
-    width: 16.5rem;
     flex-shrink: 0;
     border-bottom: 0.0625rem solid var(--neutral-30, #bfc0c3);
   }
@@ -142,8 +142,8 @@ function selectStatus(key: MarketingStatusTab): void {
 
   // Поиск
   &__search {
-    width: 19.75rem;
-    flex-shrink: 0;
+    flex: 1 1 12rem;
+    min-width: 0;
   }
 
   &__search-icon {

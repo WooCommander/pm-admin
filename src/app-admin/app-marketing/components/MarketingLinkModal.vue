@@ -1,73 +1,81 @@
 <script setup lang="ts">
-import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button'
-import { TirPmDrawer, TirPmDrawerPositionEnum } from 'tir-pm-drawer'
-import { TirPmTab, TirPmTabs } from 'tir-pm-tabs'
-import { computed, ref, watch } from 'vue'
+import { TirPmButton, TirPmButtonSizeEnum, TirPmButtonVariantEnum } from 'tir-pm-button';
+import { TirPmDrawer, TirPmDrawerPositionEnum } from 'tir-pm-drawer';
+import { TirPmTab, TirPmTabs } from 'tir-pm-tabs';
+import { computed, ref, watch } from 'vue';
 
-import type { MarketingLinkFormModel, MarketingLinkModel, MarketingLinkStatsModel } from '../models'
-import { createEmptyMarketingLinkForm, createEmptyMarketingLinkStats } from '../models'
-import MarketingLinkDetailsTab from './MarketingLinkDetailsTab.vue'
-import MarketingLinkStatsTab from './MarketingLinkStatsTab.vue'
+import type {
+  MarketingLinkFormModel,
+  MarketingLinkModel,
+  MarketingLinkStatsModel,
+} from '../models';
+import { createEmptyMarketingLinkForm, createEmptyMarketingLinkStats } from '../models';
+import MarketingLinkDetailsTab from './MarketingLinkDetailsTab.vue';
+import MarketingLinkStatsTab from './MarketingLinkStatsTab.vue';
 
-type ModalMode = 'add' | 'edit'
-type TabKey = 'details' | 'stats'
+type ModalMode = 'add' | 'edit';
+type TabKey = 'details' | 'stats';
 
-const props = withDefaults(defineProps<{
-  isVisible: boolean
-  mode: ModalMode
-  link?: MarketingLinkModel | null
-  linkStats?: MarketingLinkStatsModel | null
-}>(), {
-  link: null,
-  linkStats: null,
-})
+const props = withDefaults(
+  defineProps<{
+    isVisible: boolean;
+    mode: ModalMode;
+    link?: MarketingLinkModel | null;
+    linkStats?: MarketingLinkStatsModel | null;
+  }>(),
+  {
+    link: null,
+    linkStats: null,
+  },
+);
 
 const emit = defineEmits<{
-  (e: 'close'): void
-  (e: 'save', form: MarketingLinkFormModel): void
-}>()
+  (e: 'close'): void;
+  (e: 'save', form: MarketingLinkFormModel): void;
+}>();
 
-const activeTab = ref<TabKey>('details')
-const form = ref<MarketingLinkFormModel>(createEmptyMarketingLinkForm())
-const stats = ref<MarketingLinkStatsModel>(createEmptyMarketingLinkStats())
+const activeTab = ref<TabKey>('details');
+const form = ref<MarketingLinkFormModel>(createEmptyMarketingLinkForm());
+const stats = ref<MarketingLinkStatsModel>(createEmptyMarketingLinkStats());
 
-watch(() => props.isVisible, (visible) => {
-  if (visible) {
-    activeTab.value = 'details'
-    form.value = createEmptyMarketingLinkForm()
-    stats.value = createEmptyMarketingLinkStats()
-  }
-})
+watch(
+  () => props.isVisible,
+  (visible) => {
+    if (visible) {
+      activeTab.value = 'details';
+      form.value = createEmptyMarketingLinkForm();
+      stats.value = createEmptyMarketingLinkStats();
+    }
+  },
+);
 
-watch(() => props.linkStats, (newStats) => {
-  if (newStats) stats.value = newStats
-})
+watch(
+  () => props.linkStats,
+  (newStats) => {
+    if (newStats) stats.value = newStats;
+  },
+);
 
-const drawerTitle = computed<string>(() =>
-  props.mode === 'add' ? 'Добавление ссылки' : 'Ссылка'
-)
+const drawerTitle = computed<string>(() => (props.mode === 'add' ? 'Добавление ссылки' : 'Ссылка'));
 
-const isFormFilled = computed<boolean>(() =>
-  form.value.campaignName.trim().length > 0 &&
-  form.value.url.trim().length > 0
-)
+const isFormFilled = computed<boolean>(
+  () => form.value.campaignName.trim().length > 0 && form.value.url.trim().length > 0,
+);
 
-const saveLabel = computed<string>(() =>
-  props.mode === 'add' ? 'Добавить' : 'Сохранить'
-)
+const saveLabel = computed<string>(() => (props.mode === 'add' ? 'Добавить' : 'Сохранить'));
 
-const isSaveDisabled = computed<boolean>(() =>
-  props.mode === 'add' && !isFormFilled.value
-)
+const isSaveDisabled = computed<boolean>(() => props.mode === 'add' && !isFormFilled.value);
 
 const isVisible = computed({
   get: () => props.isVisible,
-  set: (val: boolean) => { if (!val) emit('close') },
-})
+  set: (val: boolean) => {
+    if (!val) emit('close');
+  },
+});
 
 function onSave(): void {
-  if (isSaveDisabled.value) return
-  emit('save', { ...form.value })
+  if (isSaveDisabled.value) return;
+  emit('save', { ...form.value });
 }
 </script>
 
@@ -75,7 +83,7 @@ function onSave(): void {
   <TirPmDrawer
     v-model:visible="isVisible"
     :position="TirPmDrawerPositionEnum.Right"
-    size="33.75rem"
+    size="52.5rem"
     :is-active-animation="true"
   >
     <template #content>
@@ -110,21 +118,10 @@ function onSave(): void {
         <!-- Тело (скролл) -->
         <div class="link-drawer__body">
           <!-- Вкладки (только edit) -->
-          <div
-            v-if="mode === 'edit'"
-            class="link-drawer__tabs"
-          >
+          <div v-if="mode === 'edit'" class="link-drawer__tabs">
             <TirPmTabs v-model="activeTab">
-              <TirPmTab
-                val="details"
-                :current-tab="activeTab"
-                label="Детали"
-              />
-              <TirPmTab
-                val="stats"
-                :current-tab="activeTab"
-                label="Статистика"
-              />
+              <TirPmTab val="details" :current-tab="activeTab" label="Детали" />
+              <TirPmTab val="stats" :current-tab="activeTab" label="Статистика" />
             </TirPmTabs>
           </div>
 
@@ -133,16 +130,17 @@ function onSave(): void {
             v-if="mode === 'add' || activeTab === 'details'"
             v-model="form"
           />
-          <MarketingLinkStatsTab
-            v-if="mode === 'edit' && activeTab === 'stats'"
-            v-model="stats"
-          />
+          <MarketingLinkStatsTab v-if="mode === 'edit' && activeTab === 'stats'" v-model="stats" />
         </div>
 
         <!-- Футер -->
         <div class="link-drawer__footer">
           <TirPmButton
-            :variant="isSaveDisabled ? TirPmButtonVariantEnum.TertiaryState : TirPmButtonVariantEnum.PrimaryState"
+            :variant="
+              isSaveDisabled
+                ? TirPmButtonVariantEnum.TertiaryState
+                : TirPmButtonVariantEnum.PrimaryState
+            "
             :size="TirPmButtonSizeEnum.Middle"
             :is-disabled="isSaveDisabled"
             class="link-drawer__save-btn"
@@ -209,7 +207,9 @@ function onSave(): void {
     cursor: pointer;
     color: var(--text-secondary, #686c73);
     padding: 0.5rem;
-    transition: background 0.12s, color 0.12s;
+    transition:
+      background 0.12s,
+      color 0.12s;
     flex-shrink: 0;
     margin-top: -0.5rem;
     margin-right: -0.75rem;

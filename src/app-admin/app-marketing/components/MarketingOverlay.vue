@@ -200,10 +200,15 @@ function onApply(): void {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
+    flex-wrap: wrap;
+
+    @media (max-width: 540px) {
+      flex-direction: column;
+    }
   }
 
   &__date-wrap {
-    flex: 1;
+    flex: 1 1 12rem;
     min-width: 0;
     position: relative;
   }
@@ -228,6 +233,10 @@ function onApply(): void {
   &__apply-btn {
     flex-shrink: 0;
     align-self: flex-end;
+
+    @media (max-width: 540px) {
+      align-self: stretch;
+    }
   }
 }
 </style>

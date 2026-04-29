@@ -133,8 +133,14 @@ function onModalSave(form: MarketingLinkFormModel): void {
 
   &__stats {
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     padding: 0 28px 24px;
+
+    :deep(> *) {
+      flex: 1 1 calc(25% - 9px);
+      min-width: 11rem;
+    }
   }
 }
 </style>
