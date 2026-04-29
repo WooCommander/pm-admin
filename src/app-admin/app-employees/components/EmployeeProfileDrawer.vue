@@ -5,14 +5,16 @@ import { TirPmTab, TirPmTabs, TirPmTabsVariantEnum } from 'tir-pm-tabs';
 import { XMarkIcon } from 'tir-style-system/icons/outline';
 import { ref, watch } from 'vue';
 
-import type { EmployeeFormModel } from '../models';
+import type { EmployeeFormModel, EmployeeListItemModel } from '../models';
 import EmployeeAccessTab from './EmployeeAccessTab.vue';
 import EmployeeFormFields from './EmployeeFormFields.vue';
+import EmployeeTeamTab from './EmployeeTeamTab.vue';
 
 const props = defineProps<{
   visible: boolean;
   form: EmployeeFormModel;
   isSubmitDisabled: boolean;
+  teamMembers?: EmployeeListItemModel[];
 }>();
 
 const emit = defineEmits<{
@@ -20,6 +22,8 @@ const emit = defineEmits<{
   (e: 'update:form', value: EmployeeFormModel): void;
   (e: 'submit'): void;
   (e: 'cancel'): void;
+  (e: 'team:add'): void;
+  (e: 'team:remove', id: string): void;
 }>();
 
 type EmployeeProfileTab = 'details' | 'team' | 'access';
@@ -78,15 +82,13 @@ watch(
             @update:model-value="emit('update:form', $event)"
           />
 
-          <div v-else class="employee-profile-drawer__placeholder">
-            <div class="employee-profile-drawer__placeholder-card">
-              <p class="employee-profile-drawer__placeholder-title">Управление командой</p>
-              <p class="employee-profile-drawer__placeholder-text">
-                Этот блок вынесен в следующий этап, чтобы не смешивать детали профиля с командной
-                логикой.
-              </p>
-            </div>
-          </div>
+          <EmployeeTeamTab
+            v-else-if="activeTab === 'team'"
+            :members="props.teamMembers ?? []"
+            class="employee-profile-drawer__tab-content"
+            @add="emit('team:add')"
+            @remove="emit('team:remove', $event)"
+          />
         </div>
 
         <footer v-if="activeTab === 'details'" class="employee-profile-drawer__footer">
@@ -163,36 +165,7 @@ watch(
     margin-bottom: 1.5rem;
   }
 
-  &__placeholder {
-    display: flex;
-    min-height: 20rem;
-    align-items: flex-start;
-  }
-
-  &__placeholder-card {
-    width: 100%;
-    padding: 1.125rem 1.25rem;
-    border: 0.0625rem solid #eceef2;
-    border-radius: 0.75rem;
-    background: #f8f9fc;
-  }
-
-  &__placeholder-title {
-    margin: 0 0 0.5rem;
-    color: #232931;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.25rem;
-  }
-
-  &__placeholder-text {
-    margin: 0;
-    color: #6f747d;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
-
-  &__footer {
+&__footer {
     display: flex;
     align-items: center;
     gap: 0.75rem;

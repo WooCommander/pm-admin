@@ -220,8 +220,14 @@ function statValueDisplay(stat: { value: number; total: number }): string {
 
   &__date-row {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 0.75rem;
+    flex-wrap: wrap;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 
   &__date-input {
@@ -243,8 +249,12 @@ function statValueDisplay(stat: { value: number; total: number }): string {
 
   &__cards {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
+
+    @media (max-width: 400px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__section-title {

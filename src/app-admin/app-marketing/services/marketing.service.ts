@@ -1,7 +1,10 @@
 import type {
+  MarketingChartDayModel,
   MarketingLinkModel,
+  MarketingLinkStatsModel,
   MarketingStatsCardModel,
 } from '../models'
+import { createEmptyMarketingLinkStats } from '../models'
 
 const MOCK_LATENCY_MS = 300
 
@@ -15,16 +18,87 @@ export class MarketingService {
     await delay(MOCK_LATENCY_MS)
     return MOCK_STATS_CARDS
   }
+
+  async loadLinkStats(linkId: string): Promise<MarketingLinkStatsModel> {
+    await delay(MOCK_LATENCY_MS)
+    const link = MOCK_LINKS.find(l => l.id === linkId)
+    if (!link) return createEmptyMarketingLinkStats()
+    return buildLinkStats(link)
+  }
 }
 
 export const marketingService = new MarketingService()
 
+// ---------- helpers ----------
+
+function buildLinkStats(link: MarketingLinkModel): MarketingLinkStatsModel {
+  const calls = Math.round(link.registrationsCount * 0.278)
+  const convPct = ((link.registrationsCount / link.clicksCount) * 100).toFixed(1) + '%'
+  const dailyBase = Math.min(125, Math.round(link.clicksCount / 30))
+
+  return {
+    dateFrom: null,
+    dateTo: null,
+    cards: [
+      {
+        id: 'clicks',
+        label: 'Переходы',
+        hint: '+18% vs пр. период',
+        value: link.clicksCount.toLocaleString('ru-RU'),
+        trend: 'positive',
+      },
+      {
+        id: 'registrations',
+        label: 'Регистрации',
+        hint: '+11% vs пр. период',
+        value: link.registrationsCount.toLocaleString('ru-RU'),
+        trend: 'positive',
+      },
+      {
+        id: 'calls',
+        label: 'Звонки',
+        hint: '-4% vs пр. период',
+        value: calls.toLocaleString('ru-RU'),
+        trend: 'negative',
+      },
+      {
+        id: 'conversion',
+        label: 'Конверсия',
+        hint: 'Без изменений',
+        value: convPct,
+        trend: 'neutral',
+      },
+    ],
+    chartData: buildChartData(dailyBase),
+    summaryStats: [
+      { label: 'Переходы',     value: link.clicksCount,         total: link.clicksCount, color: '#2a77ef' },
+      { label: 'Регистрации', value: link.registrationsCount,  total: link.clicksCount, color: '#0d9336' },
+      { label: 'Звонки',     value: calls,                    total: link.clicksCount, color: '#ea8313' },
+    ],
+  }
+}
+
+// 14 апр — 30 апр 2026, коэффициенты дают реалистичную кривую
+const CHART_FACTORS = [
+  0.68, 0.76, 0.88, 1.0,  0.95, 0.86, 0.78,
+  0.72, 0.80, 0.90, 0.97, 1.0,  0.94, 0.86,
+]
+
+function buildChartData(base: number): MarketingChartDayModel[] {
+  return CHART_FACTORS.map((factor, i) => ({
+    date: `${14 + i} апр`,
+    clicks: Math.round(base * factor),
+  }))
+}
+
+// ---------- mock data ----------
+
 const MOCK_LINKS: MarketingLinkModel[] = [
   {
     id: '1',
-    employeeName: '\u041a\u043e\u043d\u0441\u0442\u0430\u043d\u0442\u0438\u043d\u043e\u0432\u0441\u043a\u0438\u0439 \u041a\u043e\u043d\u0441\u0442\u0430\u043d\u0442\u0438\u043d \u041a\u043e\u043d\u0441\u0442\u0430\u043d\u0442\u0438\u043d\u043e\u0432\u0438\u0447',
+    employeeName: 'Константиновский Константин Константинович',
     employeeAvatar: null,
-    campaignName: '\u041b\u0435\u0442\u043d\u044f\u044f \u0430\u043a\u0446\u0438\u044f',
+    campaignName: 'Летняя акция',
     status: 'active',
     link: 'app.ts-sys.ru/r/summer24',
     channel: 'Instagram',
@@ -33,42 +107,42 @@ const MOCK_LINKS: MarketingLinkModel[] = [
   },
   {
     id: '2',
-    employeeName: '\u041f\u0435\u0442\u0440\u043e\u0432\u0430 \u0410\u043d\u043d\u0430 \u0412\u0438\u043a\u0442\u043e\u0440\u043e\u0432\u043d\u0430',
+    employeeName: 'Петрова Анна Викторовна',
     employeeAvatar: null,
-    campaignName: '\u041a\u043e\u043d\u0442\u0435\u043a\u0441\u0442 \u2014 \u042f\u043d\u0434\u0435\u043a\u0441',
+    campaignName: 'Контекст — Яндекс',
     status: 'active',
     link: 'app.ts-sys.ru/r/yandex-ctx',
-    channel: '\u042f\u043d\u0434\u0435\u043a\u0441.\u0414\u0438\u0440\u0435\u043a\u0442',
+    channel: 'Яндекс.Директ',
     clicksCount: 3870,
     registrationsCount: 589,
   },
   {
     id: '3',
-    employeeName: '\u0410\u0445\u043c\u0435\u0442\u043e\u0432 \u0420\u0443\u0441\u043b\u0430\u043d \u0418\u043b\u044c\u0434\u0430\u0440\u043e\u0432\u0438\u0447',
+    employeeName: 'Ахметов Руслан Ильдарович',
     employeeAvatar: null,
-    campaignName: 'VK \u2014 \u0442\u0430\u0440\u0433\u0435\u0442 \u0430\u043f\u0440\u0435\u043b\u044c',
+    campaignName: 'VK — таргет апрель',
     status: 'active',
     link: 'app.ts-sys.ru/r/vk-apr',
-    channel: '\u0412\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u0435',
+    channel: 'ВКонтакте',
     clicksCount: 2140,
     registrationsCount: 318,
   },
   {
     id: '4',
-    employeeName: '\u0418\u0432\u0430\u043d\u043e\u0432 \u0421\u0435\u0440\u0433\u0435\u0439 \u0410\u043b\u0435\u043a\u0441\u0430\u043d\u0434\u0440\u043e\u0432\u0438\u0447',
+    employeeName: 'Иванов Сергей Александрович',
     employeeAvatar: null,
-    campaignName: '\u041f\u0430\u0440\u0442\u043d\u0451\u0440 \u2014 \u0420\u043e\u043c\u0430\u0448\u043a\u0430',
+    campaignName: 'Партнёр — Ромашка',
     status: 'active',
     link: 'app.ts-sys.ru/r/romashka',
-    channel: '\u041f\u0430\u0440\u0442\u043d\u0451\u0440\u0441\u043a\u0430\u044f',
+    channel: 'Партнёрская',
     clicksCount: 1980,
     registrationsCount: 422,
   },
   {
     id: '5',
-    employeeName: '\u0421\u0430\u0444\u0430\u0440\u043e\u0432\u0430 \u041b\u0435\u0439\u043b\u0430 \u0420\u0430\u0448\u0438\u0434\u043e\u0432\u043d\u0430',
+    employeeName: 'Сафарова Лейла Рашидовна',
     employeeAvatar: null,
-    campaignName: '\u0422\u0435\u0441\u0442 \u2014 Telegram \u0437\u0438\u043c\u0430',
+    campaignName: 'Тест — Telegram зима',
     status: 'paused',
     link: 'app.ts-sys.ru/r/tg-winter',
     channel: 'Telegram',
@@ -78,10 +152,10 @@ const MOCK_LINKS: MarketingLinkModel[] = [
 ]
 
 const MOCK_STATS_CARDS: MarketingStatsCardModel[] = [
-  { id: 'total-clicks',  label: '\u0412\u0441\u0435\u0433\u043e \u043f\u0435\u0440\u0435\u0445\u043e\u0434\u043e\u0432',              hint: '12% \u0437\u0430 30 \u0434\u043d\u0435\u0439', value: '14 832', trend: 'positive' },
-  { id: 'registrations', label: '\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0439',                                        hint: '8% \u0437\u0430 30 \u0434\u043d\u0435\u0439',  value: '2 419',  trend: 'positive' },
-  { id: 'calls',         label: '\u041e\u0441\u0442\u0430\u0432\u0438\u043b\u0438 \u0437\u0432\u043e\u043d\u043e\u043a',                  hint: '3% \u0437\u0430 30 \u0434\u043d\u0435\u0439',  value: '748',    trend: 'negative' },
-  { id: 'conversion',    label: '\u041a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044f: \u043f\u0435\u0440\u0435\u0445\u043e\u0434 \u2192 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f', hint: '\u0411\u0435\u0437 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0439', value: '16.3%', trend: 'neutral' },
+  { id: 'total-clicks',  label: 'Всего переходов',              hint: '12% за 30 дней', value: '14 832', trend: 'positive' },
+  { id: 'registrations', label: 'Регистраций',                                  hint: '8% за 30 дней',  value: '2 419',  trend: 'positive' },
+  { id: 'calls',         label: 'Оставили звонок',              hint: '3% за 30 дней',  value: '748',    trend: 'negative' },
+  { id: 'conversion',    label: 'Конверсия: переход → регистрация', hint: 'Без изменений', value: '16.3%', trend: 'neutral' },
 ]
 
 const delay = (ms: number): Promise<void> =>

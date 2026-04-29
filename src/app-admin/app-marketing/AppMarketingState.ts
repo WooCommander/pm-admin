@@ -3,6 +3,7 @@ import { reactive } from 'vue'
 import type {
   MarketingFiltersModel,
   MarketingLinkModel,
+  MarketingLinkStatsModel,
   MarketingStatsCardModel,
 } from './models'
 import { createEmptyMarketingFilters } from './models'
@@ -30,12 +31,14 @@ export class AppMarketingState {
     statsCards: MarketingStatsCardModel[]
     filters: MarketingFiltersModel
     selectedLinkId: string | null
+    linkStats: MarketingLinkStatsModel | null
     isLoading: boolean
   }>({
     links: [],
     statsCards: [],
     filters: createEmptyMarketingFilters(),
     selectedLinkId: null,
+    linkStats: null,
     isLoading: false,
   })
 
@@ -53,6 +56,10 @@ export class AppMarketingState {
 
   get selectedLinkId(): string | null {
     return this.data.selectedLinkId
+  }
+
+  get linkStats(): MarketingLinkStatsModel | null {
+    return this.data.linkStats
   }
 
   get isLoading(): boolean {
@@ -82,6 +89,10 @@ export class AppMarketingState {
 
   setSelectedLinkId(id: string | null): void {
     this.data.selectedLinkId = id
+  }
+
+  setLinkStats(stats: MarketingLinkStatsModel | null): void {
+    this.data.linkStats = stats
   }
 
   setLoading(value: boolean): void {

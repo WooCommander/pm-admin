@@ -16,8 +16,10 @@ const props = withDefaults(defineProps<{
   isVisible: boolean
   mode: ModalMode
   link?: MarketingLinkModel | null
+  linkStats?: MarketingLinkStatsModel | null
 }>(), {
   link: null,
+  linkStats: null,
 })
 
 const emit = defineEmits<{
@@ -35,6 +37,10 @@ watch(() => props.isVisible, (visible) => {
     form.value = createEmptyMarketingLinkForm()
     stats.value = createEmptyMarketingLinkStats()
   }
+})
+
+watch(() => props.linkStats, (newStats) => {
+  if (newStats) stats.value = newStats
 })
 
 const drawerTitle = computed<string>(() =>

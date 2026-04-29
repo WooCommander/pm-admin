@@ -65,6 +65,7 @@ function onRowClick(link: MarketingLinkModel): void {
   modalMode.value = 'edit'
   modalLink.value = link
   isModalVisible.value = true
+  void service.loadLinkStats(link.id)
 }
 
 function onModalClose(): void {
@@ -116,6 +117,7 @@ function onModalSave(form: MarketingLinkFormModel): void {
       :is-visible="isModalVisible"
       :mode="modalMode"
       :link="modalLink"
+      :link-stats="state.linkStats"
       @close="onModalClose"
       @save="onModalSave"
     />

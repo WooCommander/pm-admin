@@ -1,6 +1,7 @@
 export { default as EmployeeAccessTab } from './EmployeeAccessTab.vue'
 export { default as EmployeeFormFields } from './EmployeeFormFields.vue'
 export { default as EmployeeProfileDrawer } from './EmployeeProfileDrawer.vue'
+export { default as EmployeeTeamTab } from './EmployeeTeamTab.vue'
 export { default as EmployeesCreateDrawer } from './EmployeesCreateDrawer.vue'
 export { default as EmployeesTable } from './EmployeesTable.vue'
 export { default as EmployeeStatusBadge } from './EmployeeStatusBadge.vue'

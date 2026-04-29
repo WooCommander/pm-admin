@@ -48,6 +48,12 @@ export class AppMarketingService {
   selectLink(id: string | null): void {
     this.state.setSelectedLinkId(id)
   }
+
+  async loadLinkStats(linkId: string): Promise<void> {
+    this.state.setLinkStats(null)
+    const stats = await marketingService.loadLinkStats(linkId)
+    this.state.setLinkStats(stats)
+  }
 }
 
 /** Singleton на всё приложение. */

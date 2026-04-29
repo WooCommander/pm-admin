@@ -28,11 +28,11 @@ function statusLabel(status: MarketingLinkStatus): string {
   return status === 'active' ? 'Активная' : 'На паузе'
 }
 
-function statusColor(status: MarketingLinkStatus): string {
+function statusColor(status: MarketingLinkStatus): 'positive' | 'operation' {
   return status === 'active' ? 'positive' : 'operation'
 }
 
-function statusIconType(status: MarketingLinkStatus): string {
+function statusIconType(status: MarketingLinkStatus): 'positive' | 'operation' {
   return status === 'active' ? 'positive' : 'operation'
 }
 
