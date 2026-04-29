@@ -21,6 +21,8 @@ const adminItems = computed(() =>
         :to="item.path"
         class="the-sidebar__item"
         active-class="the-sidebar__item--active"
+        :title="item.title"
+        :aria-label="item.title"
       >
         <span class="the-sidebar__icon-shell">
           <component :is="item.icon" class="the-sidebar__icon" />
@@ -38,6 +40,8 @@ const adminItems = computed(() =>
         :to="item.path"
         class="the-sidebar__item"
         active-class="the-sidebar__item--active"
+        :title="item.title"
+        :aria-label="item.title"
       >
         <span class="the-sidebar__icon-shell">
           <component :is="item.icon" class="the-sidebar__icon" />
@@ -119,6 +123,43 @@ const adminItems = computed(() =>
     white-space: nowrap;
     font-size: 15px;
     line-height: 1.2;
+  }
+}
+
+@media (max-width: 48rem) {
+  .the-sidebar {
+    width: 72px;
+    padding: 16px 10px;
+    gap: 12px;
+
+    &__group {
+      gap: 8px;
+    }
+
+    &__divider {
+      margin: 0 6px;
+    }
+
+    &__item {
+      justify-content: center;
+      min-height: 44px;
+      padding: 0;
+      border-radius: 12px;
+    }
+
+    &__icon-shell {
+      width: 36px;
+      height: 36px;
+    }
+
+    &__icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    &__label {
+      display: none;
+    }
   }
 }
 </style>

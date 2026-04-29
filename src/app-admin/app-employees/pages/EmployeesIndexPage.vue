@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 import { notificationAdapter } from '@/shared'
 
@@ -7,6 +7,7 @@ import { appEmployeesService } from '../AppEmployeesService'
 import {
   EmployeeConfirmDialog,
   EmployeeProfileDrawer,
+  EmployeesCardsList,
   EmployeesCreateDrawer,
   EmployeesTable,
   EmployeesToolbar,
@@ -32,9 +33,12 @@ const createForm = ref<EmployeeFormModel>(createDefaultEmployeeForm())
 const editForm = ref<EmployeeFormModel>(createDefaultEmployeeForm())
 const selectedEmployeeId = ref<string | null>(null)
 const isDeleteDialogVisible = ref(false)
+const isMobileCardsView = ref(false)
 
 const selectedEmployee = computed(() =>
-  appEmployeesService.state.employees.find((employee) => employee.id === selectedEmployeeId.value) ?? null,
+  appEmployeesService.state.employees.find(
+    (employee) => employee.id === selectedEmployeeId.value,
+  ) ?? null,
 )
 
 const teamMembers = computed(() => {
@@ -208,8 +212,12 @@ const cancelDeleteEmployee = () => {
 
 const addTeamMember = async (teamMemberId: string) => {
   if (!selectedEmployeeId.value) return
+
   try {
-    const isAdded = await appEmployeesService.addTeamMember(selectedEmployeeId.value, teamMemberId)
+    const isAdded = await appEmployeesService.addTeamMember(
+      selectedEmployeeId.value,
+      teamMemberId,
+    )
 
     if (!isAdded) {
       notificationAdapter.showError('Не удалось добавить сотрудника в команду')
@@ -221,8 +229,12 @@ const addTeamMember = async (teamMemberId: string) => {
 
 const removeTeamMember = async (teamMemberId: string) => {
   if (!selectedEmployeeId.value) return
+
   try {
-    const isRemoved = await appEmployeesService.removeTeamMember(selectedEmployeeId.value, teamMemberId)
+    const isRemoved = await appEmployeesService.removeTeamMember(
+      selectedEmployeeId.value,
+      teamMemberId,
+    )
 
     if (!isRemoved) {
       notificationAdapter.showError('Не удалось удалить сотрудника из команды')
@@ -232,10 +244,36 @@ const removeTeamMember = async (teamMemberId: string) => {
   }
 }
 
+const MOBILE_MEDIA_QUERY = '(max-width: 48rem)'
+let mobileMediaQuery: MediaQueryList | null = null
+
+const syncMobileCardsView = (event?: MediaQueryList | MediaQueryListEvent) => {
+  isMobileCardsView.value = event?.matches ?? false
+}
+
 onMounted(() => {
+  mobileMediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY)
+  syncMobileCardsView(mobileMediaQuery)
+
+  if (typeof mobileMediaQuery.addEventListener === 'function') {
+    mobileMediaQuery.addEventListener('change', syncMobileCardsView)
+  } else {
+    mobileMediaQuery.addListener(syncMobileCardsView)
+  }
+
   void appEmployeesService.loadEmployees().catch(() => {
     notificationAdapter.showError('Не удалось загрузить список сотрудников')
   })
+})
+
+onUnmounted(() => {
+  if (!mobileMediaQuery) return
+
+  if (typeof mobileMediaQuery.removeEventListener === 'function') {
+    mobileMediaQuery.removeEventListener('change', syncMobileCardsView)
+  } else {
+    mobileMediaQuery.removeListener(syncMobileCardsView)
+  }
 })
 </script>
 
@@ -248,7 +286,20 @@ onMounted(() => {
         @create="openCreate"
       />
 
+      <EmployeesCardsList
+        v-if="isMobileCardsView"
+        :employees="pagedEmployees"
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        :page-size="pageSize"
+        :total-items="filteredEmployees.total"
+        @edit="openEdit"
+        @update:page="currentPage = $event"
+        @update:page-size="updatePageSize"
+      />
+
       <EmployeesTable
+        v-else
         :employees="pagedEmployees"
         :current-page="currentPage"
         :total-pages="totalPages"

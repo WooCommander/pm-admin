@@ -230,9 +230,8 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   }
 
   &__search {
-    max-width: 17.5rem;
-    min-width: 15rem;
-    flex: 1 1 17.5rem;
+    min-width: 0;
+    flex: 1 1 auto;
   }
 
   &__search-icon,
@@ -271,8 +270,10 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   .employees-toolbar {
     flex-direction: column;
     align-items: stretch;
+    justify-content: flex-start;
 
     &__filters {
+      flex: 0 0 auto;
       flex-wrap: wrap;
     }
 
