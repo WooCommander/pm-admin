@@ -156,6 +156,7 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
       <template #leftSlot>
         <PlusIcon class="employees-toolbar__create-icon" />
       </template>
+      <span class="employees-toolbar__create-text">Добавить сотрудника</span>
     </TirPmButton>
   </div>
 </template>
@@ -180,6 +181,7 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
     align-items: center;
     gap: 0.5rem;
     flex: 0 0 auto;
+    min-width: 0;
   }
 
   &__label {
@@ -252,6 +254,10 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
     padding: 0;
   }
 
+  &__create-text {
+    display: none;
+  }
+
   :deep(.tir-pm-dropdown) {
     width: auto;
   }
@@ -266,23 +272,46 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
   }
 }
 
-@media (max-width: 61.25rem) {
+@media (max-width: 48rem) {
   .employees-toolbar {
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
+    gap: 1rem;
 
     &__filters {
       flex: 0 0 auto;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
     }
 
     &__search {
+      grid-column: 1 / -1;
       max-width: none;
     }
 
+    &__trigger {
+      justify-content: space-between;
+      min-height: 2.5rem;
+      padding: 0.5rem 0.75rem;
+      border: 0.0625rem solid #eceef2;
+      border-radius: 0.75rem;
+      background: #f8f9fc;
+    }
+
     &__create {
-      align-self: flex-end;
+      align-self: stretch;
+      width: 100%;
+      min-width: 0;
+      height: 2.5rem;
+      min-height: 2.5rem;
+      padding: 0 0.875rem;
+      justify-content: center;
+    }
+
+    &__create-text {
+      display: inline;
     }
   }
 }
@@ -290,13 +319,23 @@ const selectedRoleOption = computed<DropdownOption | undefined>(() =>
 @media (max-width: 45rem) {
   .employees-toolbar {
     &__filters {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.75rem;
+      grid-template-columns: 1fr;
     }
 
     &__group {
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 4.5rem minmax(0, 1fr);
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    &__trigger {
+      width: 100%;
+    }
+
+    &__selected-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

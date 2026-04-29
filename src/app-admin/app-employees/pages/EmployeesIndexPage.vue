@@ -351,18 +351,22 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .employees-page {
+  height: 100%;
+  min-height: 0;
   padding: 1.375rem;
 
   &__surface {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
     gap: 1.125rem;
-    min-height: calc(100vh - 6.25rem);
+    height: 100%;
+    min-height: 0;
     padding: 1.375rem;
     border: 0.0625rem solid #eceef2;
     border-radius: 1.125rem;
     background: #ffffff;
     box-shadow: 0 0.0625rem 0.125rem rgba(16, 24, 40, 0.04);
+    overflow: hidden;
   }
 }
 

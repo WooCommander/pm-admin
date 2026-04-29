@@ -146,17 +146,25 @@ const copyEmail = async (email: string) => {
 
 <style lang="scss" scoped>
 .employees-cards-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
   gap: 1rem;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
 
   &__grid {
     display: grid;
     gap: 0.875rem;
+    min-height: 0;
+    align-content: start;
+    overflow: auto;
+    padding-right: 0.25rem;
   }
 
   &__card {
     display: grid;
+    align-self: start;
     gap: 0.875rem;
     padding: 1rem;
     border: 0.0625rem solid #eceef2;
@@ -250,6 +258,9 @@ const copyEmail = async (email: string) => {
   }
 
   &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 1rem;
     border: 0.0625rem solid #eceef2;
     border-radius: 0.875rem;
@@ -264,6 +275,8 @@ const copyEmail = async (email: string) => {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    padding-top: 0.25rem;
+    border-top: 0.0625rem solid #eceef2;
   }
 
   &__meta {
