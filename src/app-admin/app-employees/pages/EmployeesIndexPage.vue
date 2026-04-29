@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 
+import { notificationAdapter } from '@/shared'
+
 import { appEmployeesService } from '../AppEmployeesService'
 import {
   EmployeeConfirmDialog,
@@ -147,34 +149,52 @@ const updateProfileDrawerVisibility = (value: boolean) => {
 const submitCreate = async () => {
   if (!isEmployeeFormValid(createForm.value)) return
 
-  await appEmployeesService.createEmployee(createForm.value)
-  closeCreate()
-  resetCreateForm()
-  currentPage.value = 1
+  try {
+    await appEmployeesService.createEmployee(createForm.value)
+    closeCreate()
+    resetCreateForm()
+    currentPage.value = 1
+  } catch {
+    notificationAdapter.showError('Не удалось создать сотрудника')
+  }
 }
 
 const submitEdit = async () => {
   if (!selectedEmployeeId.value || !isEmployeeFormValid(editForm.value)) return
 
-  const isUpdated = await appEmployeesService.updateEmployee(
-    selectedEmployeeId.value,
-    editForm.value,
-  )
+  try {
+    const isUpdated = await appEmployeesService.updateEmployee(
+      selectedEmployeeId.value,
+      editForm.value,
+    )
 
-  if (!isUpdated) return
+    if (!isUpdated) {
+      notificationAdapter.showError('Не удалось обновить сотрудника')
+      return
+    }
 
-  closeEdit()
+    closeEdit()
+  } catch {
+    notificationAdapter.showError('Не удалось обновить сотрудника')
+  }
 }
 
 const submitDelete = async () => {
   if (!selectedEmployeeId.value) return
 
-  const isDeleted = await appEmployeesService.deleteEmployee(selectedEmployeeId.value)
-  if (!isDeleted) return
+  try {
+    const isDeleted = await appEmployeesService.deleteEmployee(selectedEmployeeId.value)
+    if (!isDeleted) {
+      notificationAdapter.showError('Не удалось удалить сотрудника')
+      return
+    }
 
-  isDeleteDialogVisible.value = false
-  closeEdit()
-  currentPage.value = Math.min(currentPage.value, totalPages.value)
+    isDeleteDialogVisible.value = false
+    closeEdit()
+    currentPage.value = Math.min(currentPage.value, totalPages.value)
+  } catch {
+    notificationAdapter.showError('Не удалось удалить сотрудника')
+  }
 }
 
 const requestDeleteEmployee = () => {
@@ -188,16 +208,34 @@ const cancelDeleteEmployee = () => {
 
 const addTeamMember = async (teamMemberId: string) => {
   if (!selectedEmployeeId.value) return
-  await appEmployeesService.addTeamMember(selectedEmployeeId.value, teamMemberId)
+  try {
+    const isAdded = await appEmployeesService.addTeamMember(selectedEmployeeId.value, teamMemberId)
+
+    if (!isAdded) {
+      notificationAdapter.showError('Не удалось добавить сотрудника в команду')
+    }
+  } catch {
+    notificationAdapter.showError('Не удалось добавить сотрудника в команду')
+  }
 }
 
 const removeTeamMember = async (teamMemberId: string) => {
   if (!selectedEmployeeId.value) return
-  await appEmployeesService.removeTeamMember(selectedEmployeeId.value, teamMemberId)
+  try {
+    const isRemoved = await appEmployeesService.removeTeamMember(selectedEmployeeId.value, teamMemberId)
+
+    if (!isRemoved) {
+      notificationAdapter.showError('Не удалось удалить сотрудника из команды')
+    }
+  } catch {
+    notificationAdapter.showError('Не удалось удалить сотрудника из команды')
+  }
 }
 
 onMounted(() => {
-  void appEmployeesService.loadEmployees()
+  void appEmployeesService.loadEmployees().catch(() => {
+    notificationAdapter.showError('Не удалось загрузить список сотрудников')
+  })
 })
 </script>
 

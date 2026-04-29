@@ -1,10 +1,9 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { VueLoaderPlugin } from 'vue-loader';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
+import { VueLoaderPlugin } from 'vue-loader';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -138,14 +137,6 @@ export default {
           },
         },
       ],
-    }),
-    new ForkTsCheckerWebpackPlugin({
-      typescript: {
-        diagnosticOptions: {
-          semantic: true,
-          syntactic: true,
-        },
-      },
     }),
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: 'true',

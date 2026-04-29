@@ -1,9 +1,33 @@
 <script setup lang="ts">
-/**
- * Основной лейаут админки: шапка сверху (56px) + сайдбар слева (224px) + контент.
- * Контент модулей вставляется через <router-view />.
- */
+import {
+  TirPmNotificationEventBus,
+  TirPmNotificationGroup,
+  type TirPmNotificationModel,
+} from 'tir-components'
+import { onMounted, onUnmounted } from 'vue'
+
+import { ADMIN_NOTIFICATION_GROUP } from '@/shared'
+
 import { TheHeader, TheSidebar } from './components'
+
+const handleAdminNotification = (event: Event) => {
+  const customEvent = event as CustomEvent<TirPmNotificationModel>
+
+  if (!customEvent.detail) return
+
+  TirPmNotificationEventBus.emit('add', customEvent.detail)
+}
+
+onMounted(() => {
+  document.addEventListener(ADMIN_NOTIFICATION_GROUP, handleAdminNotification as EventListener)
+})
+
+onUnmounted(() => {
+  document.removeEventListener(
+    ADMIN_NOTIFICATION_GROUP,
+    handleAdminNotification as EventListener,
+  )
+})
 </script>
 
 <template>
@@ -15,6 +39,11 @@ import { TheHeader, TheSidebar } from './components'
         <router-view />
       </main>
     </div>
+    <TirPmNotificationGroup
+      :group="ADMIN_NOTIFICATION_GROUP"
+      position="top-right"
+      :z-index="20000"
+    />
   </div>
 </template>
 
